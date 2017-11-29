@@ -10,17 +10,17 @@ namespace GarterBelt
 {
 	class GlobalHotkeyBinder
 	{
-		List<KeyboardHook> hookers = new List<KeyboardHook>();
+		Dictionary<string, KeyboardHook> hookers = new Dictionary<string, KeyboardHook>();
 		public GlobalHotkeyBinder() {
 
 		}
 
-		public void AddHindHandler(Keys key, ModifierKeys modifiers, Action<object, KeyPressedEventArgs> callback)
+		public void AddBindHandler(string name, Keys key, ModifierKeys modifiers, Action<object, KeyPressedEventArgs> callback)
 		{
 			var hook = new KeyboardHook();
 			hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(callback);
 			hook.RegisterHotKey(modifiers, key);
-			hookers.Add(hook);
+			hookers.Add(name, hook);
 		}
 
 		private sealed class KeyboardHook : IDisposable

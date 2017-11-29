@@ -31,11 +31,11 @@ namespace GarterBelt
 			InitializeComponent();
 			LoadHandle();
 
-			binder.AddHindHandler(Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
+			binder.AddBindHandler("Handler1", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				HideByHandle();
 			});
-			binder.AddHindHandler(Keys.F2, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
+			binder.AddBindHandler("Handler2", Keys.F2, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				ShowByHandle();
 			});
@@ -88,6 +88,21 @@ namespace GarterBelt
 			FindProcessID(id);
 		}
 
+		private void OpacityByHandle(int opacity)
+		{
+			WindowAnnotation.SetOpacity(pId, opacity);
+		}
+
+		private void NoTopmostByHandle()
+		{
+			WindowAnnotation.SetTopmost(pId, false);
+		}
+
+		private void TopmostByHandle()
+		{
+			WindowAnnotation.SetTopmost(pId, true);
+		}
+
 
 		private void button_Click(object sender, RoutedEventArgs e )
 		{
@@ -98,6 +113,13 @@ namespace GarterBelt
 
 			if (sender == this.buttonHideByHandle) HideByHandle();
 			if (sender == this.buttonShowByHandle) ShowByHandle();
+
+			if (sender == this.buttonTopmost) TopmostByHandle();
+			if (sender == this.buttonNoTopmost) NoTopmostByHandle();
+
+			int opacity = 0;
+			int.TryParse(this.textboxOpacity.Text, out opacity);
+			if (sender == this.buttonOpacity) OpacityByHandle(opacity);
 		}
 	}
 }

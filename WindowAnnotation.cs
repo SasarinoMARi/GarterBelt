@@ -13,5 +13,40 @@ namespace GarterBelt
 
 		[DllImport("User32")]
 		public static extern int ShowWindow(int hwnd, WindowState nCmdShow);
+
+		[DllImport("user32.dll")]
+		static extern bool SetLayeredWindowAttributes(int hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+		[DllImport("user32")]
+		public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
+
+		[DllImport("user32")]
+		public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
+
+		public const int GWL_EXSTYLE = -20;
+		public const int WS_EX_LAYERED = 0x80000;
+		public const int LWA_ALPHA = 0x2;
+		public const int LWA_COLORKEY = 0x1;
+
+		[DllImport("user32.dll")]
+		static extern bool SetWindowPos(int hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+		private const int HWND_TOPMOST = -1;
+		private const int HWND_NOTOPMOST = -2;
+		private const int SWP_NOMOVE = 0x0002;
+		private const int SWP_NOSIZE = 0x0001;
+
+
+		public static bool SetOpacity(int hwnd, int opacity) {
+			SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
+			return SetLayeredWindowAttributes(hwnd, 0, 128, LWA_ALPHA);
+		}
+
+		public static void SetTopmost(int hwnd, bool topmost)
+		{
+			SetWindowPos(hwnd,
+				(topmost)?HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
+
 	}
 }

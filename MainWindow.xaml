@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GarterBelt"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="Remotcon" Height="145" Width="200">
+        Title="Remotcon" Height="220" Width="200">
     <Grid>
         <Button x:Name="buttonFindHandle" Content="핸들 찾기" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         <Label x:Name="labelHandleId" Content="PID : 0" HorizontalAlignment="Left" Margin="90,8,0,0" VerticalAlignment="Top"/>
@@ -16,6 +16,13 @@
 
         <Button x:Name="buttonLoadHandle" Content="불러오기" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         <Button x:Name="buttonExportHandle" Content="내보내기" HorizontalAlignment="Left" Margin="90,70,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+
+
+        <Button x:Name="buttonTopmost" Content="맨 위로" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <Button x:Name="buttonNoTopmost" Content="← 해제" HorizontalAlignment="Left" Margin="90,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        
+        <TextBox x:Name="textboxOpacity" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="buttonOpacity" Content="투명" HorizontalAlignment="Left" Margin="90,150,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
 
     </Grid>
 </Window>
