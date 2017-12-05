@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -51,12 +52,12 @@ namespace GarterBelt
 			this.sliderOpacity.Value = opacity;
 		}
 
-		private void FindHandle()
+		private void FindHandle(string name)
 		{
 			Process[] processRunning = Process.GetProcesses();
 			foreach (Process p in processRunning)
 			{
-				if (p.ProcessName.ToLower().Contains("ffxiv"))
+				if (p.ProcessName.ToLower().Contains(name))
 				{
 					FindProcessID(p.MainWindowHandle.ToInt32());
 				}
@@ -108,9 +109,10 @@ namespace GarterBelt
 		}
 
 
-		private void button_Click(object sender, RoutedEventArgs e )
+		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender == this.buttonFindHandle) FindHandle();
+			//if (sender == this.buttonFindHandle) DialogHost.Show(this.dialogFindWindow);
+			//FindHandle("ffxiv");
 
 			if (sender == this.buttonLoadHandle) LoadHandle();
 			if (sender == this.buttonExportHandle) ExportHandle();
@@ -125,6 +127,13 @@ namespace GarterBelt
 		private void sliderOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			OpacityByHandle(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
+		}
+
+		private void buttonDialogOK_Click(object sender, RoutedEventArgs e)
+		{
+			var pName = this.textBoxProcessName.Text;
+			if (string.IsNullOrWhiteSpace(pName)) return;
+			FindHandle(pName);
 		}
 	}
 }

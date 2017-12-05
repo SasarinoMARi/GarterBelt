@@ -14,12 +14,20 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="Remotcon" Height="170" Width="422">
+        Title="Remotcon" Height="300" Width="422">
     <Grid >
-        <StackPanel  Orientation="Horizontal">
+        <materialDesign:DialogHost x:Name="dialogFindWindow" IsOpen="False" >
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel  Width="250" Height="120" Margin="10, 10, 10, 10">
+                    <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
+                    <TextBox x:Name="textBoxProcessName" Margin="5, 5, 5, 5" />
+                    <Button x:Name="buttonDialogOK" Content="확인" Margin="5, 5, 5, 5" Click="buttonDialogOK_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+            <StackPanel  Orientation="Horizontal">
             <StackPanel Margin="5, 5, 5, 5">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="핸들 찾기" Click="button_Click"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="핸들 찾기" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
                     <Label x:Name="labelHandleId" Margin="5, 5, 5, 5" Content="PID : 0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -38,6 +46,8 @@
                 </StackPanel>
                 <Slider x:Name="sliderOpacity" Margin="5, 5, 5, 5" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
             </StackPanel>
-        </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost>
+
     </Grid>
 </Window>
