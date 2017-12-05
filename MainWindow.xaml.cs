@@ -28,9 +28,9 @@ namespace GarterBelt
 
 		public MainWindow()
 		{
+			ConsoleManager.Show();
 			InitializeComponent();
-			LoadHandle();
-
+		
 			binder.AddBindHandler("Handler1", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				HideByHandle();
@@ -39,6 +39,8 @@ namespace GarterBelt
 			{
 				ShowByHandle();
 			});
+
+			LoadHandle();
 		}
 
 		private void FindProcessID(int id)
