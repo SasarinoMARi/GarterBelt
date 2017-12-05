@@ -28,7 +28,7 @@
                         <materialDesign:DialogHost.DialogContent>
                             <StackPanel  Width="280" Height="120" Margin="10, 10, 10, 10">
                                 <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
-                                <TextBox x:Name="textBoxProcessName" Margin="5, 5, 5, 5" />
+                                <TextBox x:Name="textBoxProcessName" Margin="5, 5, 5, 5" KeyDown="textBoxProcessName_KeyDown"/>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <Button x:Name="buttonDialogOK" Content="확인" Margin="5, 5, 5, 5" Click="button_FindProcessDialogOK_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
                                     <Button Content="취소" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
