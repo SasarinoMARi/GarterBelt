@@ -98,6 +98,7 @@ namespace GarterBelt
 
 		private void LoadHandle()
 		{
+			if (!File.Exists("id.txt")) return;
 			Garterbelts garters = Resources["garters"] as Garterbelts;
 			var temp = File.ReadAllText("id.txt");
 			if (temp == null) return;
