@@ -47,6 +47,8 @@ namespace GarterBelt
 		{
 			this.pId = id;
 			this.labelHandleId.Content = "PID : " + id;
+			var opacity = WindowAnnotation.SetWindowToStyled(pId);
+			this.sliderOpacity.Value = opacity;
 		}
 
 		private void FindHandle()
@@ -90,7 +92,7 @@ namespace GarterBelt
 			FindProcessID(id);
 		}
 
-		private void OpacityByHandle(int opacity)
+		private void OpacityByHandle(byte opacity)
 		{
 			WindowAnnotation.SetOpacity(pId, opacity);
 		}
@@ -118,10 +120,11 @@ namespace GarterBelt
 
 			if (sender == this.buttonTopmost) TopmostByHandle();
 			if (sender == this.buttonNoTopmost) NoTopmostByHandle();
+		}
 
-			int opacity = 0;
-			int.TryParse(this.textboxOpacity.Text, out opacity);
-			if (sender == this.buttonOpacity) OpacityByHandle(opacity);
+		private void sliderOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			OpacityByHandle(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
 		}
 	}
 }

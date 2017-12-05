@@ -16,6 +16,8 @@ namespace GarterBelt
 
 		[DllImport("user32.dll")]
 		static extern bool SetLayeredWindowAttributes(int hwnd, uint crKey, byte bAlpha, uint dwFlags);
+		[DllImport("user32.dll")]
+		static extern bool GetLayeredWindowAttributes(int hwnd, out uint crKey, out byte bAlpha, out uint dwFlags);
 
 		[DllImport("user32")]
 		public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
@@ -35,11 +37,32 @@ namespace GarterBelt
 		private const int HWND_NOTOPMOST = -2;
 		private const int SWP_NOMOVE = 0x0002;
 		private const int SWP_NOSIZE = 0x0001;
+		
+		public static int SetWindowToStyled(int hwnd) {
+			var cur = GetWindowLong(hwnd, GWL_EXSTYLE);
+			byte opacity = 0;
+			if (cur != 256) {
+				Console.WriteLine("이미 EX스타일이 적용된 윈도우입니다");
+				opacity = GetOpacity(hwnd);
+				Console.WriteLine("투명도 : " + GetOpacity(hwnd));
+			}
+			else
+			{
+				Console.WriteLine("EX스타일이 적용되었습니다");
+				SetWindowLong(hwnd, GWL_EXSTYLE, cur ^ WS_EX_LAYERED);
+			}
+			return opacity;
+		}
+		public static byte GetOpacity(int hwnd)
+		{
+			uint crKey, dwFlags;
+			byte bAlpha;
+			GetLayeredWindowAttributes(hwnd, out crKey, out bAlpha, out dwFlags);
+			return bAlpha;
+		}
 
-
-		public static bool SetOpacity(int hwnd, int opacity) {
-			SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) ^ WS_EX_LAYERED);
-			return SetLayeredWindowAttributes(hwnd, 0, 128, LWA_ALPHA);
+		public static bool SetOpacity(int hwnd, byte opacity) {
+			return SetLayeredWindowAttributes(hwnd, 0, opacity, LWA_ALPHA);
 		}
 
 		public static void SetTopmost(int hwnd, bool topmost)

@@ -21,8 +21,7 @@
         <Button x:Name="buttonTopmost" Content="맨 위로" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         <Button x:Name="buttonNoTopmost" Content="← 해제" HorizontalAlignment="Left" Margin="90,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         
-        <TextBox x:Name="textboxOpacity" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="buttonOpacity" Content="투명" HorizontalAlignment="Left" Margin="90,150,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <Slider x:Name="sliderOpacity" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="155" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
 
     </Grid>
 </Window>
