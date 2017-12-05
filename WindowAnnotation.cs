@@ -37,11 +37,13 @@ namespace GarterBelt
 		private const int HWND_NOTOPMOST = -2;
 		private const int SWP_NOMOVE = 0x0002;
 		private const int SWP_NOSIZE = 0x0001;
-		
-		public static int SetWindowToStyled(int hwnd) {
+
+		public static int SetWindowToStyled(int hwnd)
+		{
 			var cur = GetWindowLong(hwnd, GWL_EXSTYLE);
 			byte opacity = 0;
-			if (cur != 256) {
+			if (cur != 256)
+			{
 				Console.WriteLine("이미 EX스타일이 적용된 윈도우입니다");
 				opacity = GetOpacity(hwnd);
 				Console.WriteLine("투명도 : " + GetOpacity(hwnd));
@@ -61,14 +63,14 @@ namespace GarterBelt
 			return bAlpha;
 		}
 
-		public static bool SetOpacity(int hwnd, byte opacity) {
+		public static bool SetOpacity(int hwnd, byte opacity)
+		{
 			return SetLayeredWindowAttributes(hwnd, 0, opacity, LWA_ALPHA);
 		}
 
 		public static void SetTopmost(int hwnd, bool topmost)
 		{
-			SetWindowPos(hwnd,
-				(topmost)?HWND_TOPMOST: HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			SetWindowPos(hwnd, (topmost) ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		}
 
 	}

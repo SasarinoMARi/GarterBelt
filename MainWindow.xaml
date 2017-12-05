@@ -4,24 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GarterBelt"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="Remotcon" Height="220" Width="200">
-    <Grid>
-        <Button x:Name="buttonFindHandle" Content="핸들 찾기" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Label x:Name="labelHandleId" Content="PID : 0" HorizontalAlignment="Left" Margin="90,8,0,0" VerticalAlignment="Top"/>
-
-        <Button x:Name="buttonHideByHandle" Content="찢기" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button x:Name="buttonShowByHandle" Content="붙이기" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-
-        <Button x:Name="buttonLoadHandle" Content="불러오기" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button x:Name="buttonExportHandle" Content="내보내기" HorizontalAlignment="Left" Margin="90,70,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-
-
-        <Button x:Name="buttonTopmost" Content="맨 위로" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button x:Name="buttonNoTopmost" Content="← 해제" HorizontalAlignment="Left" Margin="90,120,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        
-        <Slider x:Name="sliderOpacity" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="155" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
-
+        Title="Remotcon" Height="170" Width="422">
+    <Grid >
+        <StackPanel  Orientation="Horizontal">
+            <StackPanel Margin="5, 5, 5, 5">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="핸들 찾기" Click="button_Click"/>
+                    <Label x:Name="labelHandleId" Margin="5, 5, 5, 5" Content="PID : 0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="buttonLoadHandle" Content="불러오기" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    <Button x:Name="buttonExportHandle" Content="내보내기" Margin="5, 5, 5, 5" Click="button_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel  Margin="5, 5, 5, 5">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="buttonHideByHandle" Content="찢기" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    <Button x:Name="buttonShowByHandle" Content="붙이기" Margin="5, 5, 5, 5" Click="button_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="buttonTopmost" Content="맨 위로" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    <Button x:Name="buttonNoTopmost" Content="← 해제" Margin="5, 5, 5, 5" Click="button_Click"/>
+                </StackPanel>
+                <Slider x:Name="sliderOpacity" Margin="5, 5, 5, 5" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
