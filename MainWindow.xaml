@@ -14,40 +14,69 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="Remotcon" Height="300" Width="422">
+        Title="Remotcon" Height="300" Width="400"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <local:Garterbelts x:Key="garters" />
+    </Window.Resources>
     <Grid >
-        <materialDesign:DialogHost x:Name="dialogFindWindow" IsOpen="False" >
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel  Width="250" Height="120" Margin="10, 10, 10, 10">
-                    <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
-                    <TextBox x:Name="textBoxProcessName" Margin="5, 5, 5, 5" />
-                    <Button x:Name="buttonDialogOK" Content="확인" Margin="5, 5, 5, 5" Click="buttonDialogOK_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
-                </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
-            <StackPanel  Orientation="Horizontal">
-            <StackPanel Margin="5, 5, 5, 5">
-                    <StackPanel Orientation="Horizontal">
+        <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <StackPanel Margin="5, 5, 5, 5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Label x:Name="labelHandleId" Margin="5, 5, 5, 5" Content="선택된 프로세스 없음" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <materialDesign:DialogHost x:Name="dialogFindWindow" IsOpen="False" >
+                        <materialDesign:DialogHost.DialogContent>
+                            <StackPanel  Width="280" Height="120" Margin="10, 10, 10, 10">
+                                <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
+                                <TextBox x:Name="textBoxProcessName" Margin="5, 5, 5, 5" />
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <Button x:Name="buttonDialogOK" Content="확인" Margin="5, 5, 5, 5" Click="button_FindProcessDialogOK_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                    <Button Content="취소" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:DialogHost.DialogContent>
                         <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="핸들 찾기" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
-                    <Label x:Name="labelHandleId" Margin="5, 5, 5, 5" Content="PID : 0" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="buttonLoadHandle" Content="불러오기" Margin="5, 5, 5, 5" Click="button_Click"/>
-                    <Button x:Name="buttonExportHandle" Content="내보내기" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    </materialDesign:DialogHost>
+                    <materialDesign:DialogHost IsOpen="False" >
+                        <materialDesign:DialogHost.DialogContent>
+                            <StackPanel  Width="500" Height="400" Margin="10, 10, 10, 10">
+                                <ListView x:Name="listView" HorizontalAlignment="Left" Width="400" Height="350" VerticalAlignment="Top" ItemsSource="{Binding Source={StaticResource garters}}">
+                                    <ListView.View>
+                                        <GridView AllowsColumnReorder="True">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="pName"/>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ProcessId}" Header="pHandle" Width="100" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=MainWindowHandle}" Header="wHandle" Width="100" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <Button x:Name="buttonSDOk"  Content="선택" Margin="5, 5, 5, 5" Click="button_SelectDialog_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                    <Button x:Name="buttonSDRemove"  Content="삭제" Margin="5, 5, 5, 5" Click="button_SelectDialog_Click"/>
+                                    <Button Content="취소" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:DialogHost.DialogContent>
+                        <Button x:Name="buttonLoadHandle" Content="핸들 목록" Margin="5, 5, 5, 5" Click="button_Click" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                    </materialDesign:DialogHost>
+                    <Button x:Name="buttonExportHandle" Content="목록 저장" Margin="5, 5, 5, 5" Click="button_Click"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel  Margin="5, 5, 5, 5">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="buttonHideByHandle" Content="찢기" Margin="5, 5, 5, 5" Click="button_Click"/>
-                    <Button x:Name="buttonShowByHandle" Content="붙이기" Margin="5, 5, 5, 5" Click="button_Click"/>
+            <StackPanel x:Name="panelMainControls" Margin="5, 25, 5, 5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Button x:Name="buttonHideByHandle" Content="창 숨기기 (Shift+F1)" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    <Button x:Name="buttonShowByHandle" Content="창 보이기 (Shift+F2)" Margin="5, 5, 5, 5" Click="button_Click"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="buttonTopmost" Content="맨 위로" Margin="5, 5, 5, 5" Click="button_Click"/>
-                    <Button x:Name="buttonNoTopmost" Content="← 해제" Margin="5, 5, 5, 5" Click="button_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Button x:Name="buttonTopmost" Content="항상 위로 설정" Margin="5, 5, 5, 5" Click="button_Click"/>
+                    <Button x:Name="buttonNoTopmost" Content="항상 위로 해제" Margin="5, 5, 5, 5" Click="button_Click"/>
                 </StackPanel>
-                <Slider x:Name="sliderOpacity" Margin="5, 5, 5, 5" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Label Margin="5, 5, 5, 5" Content="슬라이드해서 투명도 설정" />
+                    <Slider x:Name="sliderOpacity" Width="180" Margin="5, 5, 5, 5" ValueChanged="sliderOpacity_ValueChanged" Maximum="255" Minimum="0" Interval="15" />
+                </StackPanel>
             </StackPanel>
-            </StackPanel>
-        </materialDesign:DialogHost>
+        </StackPanel>
+
 
     </Grid>
 </Window>

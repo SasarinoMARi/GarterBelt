@@ -29,9 +29,9 @@ namespace GarterBelt
 
 		public MainWindow()
 		{
-			ConsoleManager.Show();
+			//ConsoleManager.Show();
 			InitializeComponent();
-		
+
 			binder.AddBindHandler("Handler1", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				HideByHandle();
@@ -44,12 +44,13 @@ namespace GarterBelt
 			LoadHandle();
 		}
 
-		private void FindProcessID(int id)
+		private void SetProcess(GarterProcesses g)
 		{
-			this.pId = id;
-			this.labelHandleId.Content = "PID : " + id;
+			this.pId = g.MainWindowHandle;
+			this.labelHandleId.Content = "PNAME : " + g.Name;
 			var opacity = WindowAnnotation.SetWindowToStyled(pId);
 			this.sliderOpacity.Value = opacity;
+			if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
 		}
 
 		private void FindHandle(string name)
@@ -57,9 +58,17 @@ namespace GarterBelt
 			Process[] processRunning = Process.GetProcesses();
 			foreach (Process p in processRunning)
 			{
+				if (p.MainWindowHandle.ToInt32() == 0) continue;
 				if (p.ProcessName.ToLower().Contains(name))
 				{
-					FindProcessID(p.MainWindowHandle.ToInt32());
+					Garterbelts garters = Resources["garters"] as Garterbelts;
+					if (garters.Any(x => x.ProcessId == p.Id && x.Name == p.ProcessName)) continue;
+					else
+					{
+						var g = new GarterProcesses(p);
+						garters.Add(g);
+						SetProcess(g);
+					}
 				}
 			}
 		}
@@ -78,19 +87,30 @@ namespace GarterBelt
 
 		private void ExportHandle()
 		{
-			File.WriteAllText("id.txt", pId.ToString());
+			var lines = string.Empty;
+			Garterbelts garters = Resources["garters"] as Garterbelts;
+			foreach (var item in garters)
+			{
+				lines += item.ToString() + '\n';
+			}
+			File.WriteAllText("id.txt", lines);
 		}
 
 		private void LoadHandle()
 		{
+			Garterbelts garters = Resources["garters"] as Garterbelts;
 			var temp = File.ReadAllText("id.txt");
 			if (temp == null) return;
+			var lines = temp.Split('\n');
+			foreach (var line in lines)
+			{
+				var item = GarterProcesses.LoadFromLine(line);
+				if (item == null) continue;
+				if (garters.Any(x => x.ProcessId == item.ProcessId && x.Name == item.Name)) continue;
+				garters.Add(item);
+			}
 
-			int id = 0;
-			int.TryParse(temp, out id);
-			if (id == 0) return;
-
-			FindProcessID(id);
+			if (garters.Count > 0) SetProcess(garters.First());
 		}
 
 		private void OpacityByHandle(byte opacity)
@@ -108,13 +128,8 @@ namespace GarterBelt
 			WindowAnnotation.SetTopmost(pId, true);
 		}
 
-
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			//if (sender == this.buttonFindHandle) DialogHost.Show(this.dialogFindWindow);
-			//FindHandle("ffxiv");
-
-			if (sender == this.buttonLoadHandle) LoadHandle();
 			if (sender == this.buttonExportHandle) ExportHandle();
 
 			if (sender == this.buttonHideByHandle) HideByHandle();
@@ -129,11 +144,27 @@ namespace GarterBelt
 			OpacityByHandle(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
 		}
 
-		private void buttonDialogOK_Click(object sender, RoutedEventArgs e)
+		private void button_FindProcessDialogOK_Click(object sender, RoutedEventArgs e)
 		{
 			var pName = this.textBoxProcessName.Text;
 			if (string.IsNullOrWhiteSpace(pName)) return;
 			FindHandle(pName);
 		}
+
+		private void button_SelectDialog_Click(object sender, RoutedEventArgs e)
+		{
+			if (sender == this.buttonSDOk)
+			{
+				var g = this.listView.SelectedItem as GarterProcesses;
+				if (g == null) return;
+				SetProcess(g);
+			}
+			if (sender == this.buttonSDRemove)
+			{
+				Garterbelts garters = Resources["garters"] as Garterbelts;
+				garters.Remove(this.listView.SelectedItem as GarterProcesses);
+			}
+		}
+
 	}
 }
