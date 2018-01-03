@@ -30,7 +30,7 @@ namespace GarterBelt
 
 		public MainWindow()
 		{
-			//ConsoleManager.Show();
+			ConsoleManager.Show();
 			InitializeComponent();
 
 			#region key binding
@@ -92,6 +92,7 @@ namespace GarterBelt
 					}
 				}
 			}
+			ExportHandle();
 		}
 
 		private void ShowByHandle()
@@ -152,8 +153,6 @@ namespace GarterBelt
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
-			if (sender == this.buttonExportHandle) ExportHandle();
-
 			if (sender == this.buttonHideByHandle) HideByHandle();
 			if (sender == this.buttonShowByHandle) ShowByHandle();
 

@@ -42,17 +42,16 @@ namespace GarterBelt
 		{
 			var cur = GetWindowLong(hwnd, GWL_EXSTYLE);
 			byte opacity = 0;
-			if (cur != 256)
-			{
-				Console.WriteLine("이미 EX스타일이 적용된 윈도우입니다");
-				opacity = GetOpacity(hwnd);
-				Console.WriteLine("투명도 : " + GetOpacity(hwnd));
-			}
-			else
+			if (cur == 256)
 			{
 				Console.WriteLine("EX스타일이 적용되었습니다");
 				SetWindowLong(hwnd, GWL_EXSTYLE, cur ^ WS_EX_LAYERED);
+				opacity = 255;
 			}
+			else {
+				opacity = GetOpacity(hwnd);
+			}
+			Console.WriteLine("투명도 : " + opacity);
 			return opacity;
 		}
 		public static byte GetOpacity(int hwnd)

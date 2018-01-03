@@ -58,7 +58,6 @@
                         </materialDesign:DialogHost.DialogContent>
                         <Button x:Name="buttonLoadHandle" Content="핸들 목록" Margin="5, 5, 5, 5" Click="button_Click" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
                     </materialDesign:DialogHost>
-                    <Button x:Name="buttonExportHandle" Content="목록 저장" Margin="5, 5, 5, 5" Click="button_Click"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel x:Name="panelMainControls" Margin="5, 25, 5, 5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False">
