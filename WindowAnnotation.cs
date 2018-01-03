@@ -46,11 +46,9 @@ namespace GarterBelt
 			{
 				Console.WriteLine("EX Window style applied.");
 				SetWindowLong(hwnd, GWL_EXSTYLE, cur ^ WS_EX_LAYERED);
-				opacity = 255;
+				SetOpacity(hwnd, 255);
 			}
-			else {
-				opacity = GetOpacity(hwnd);
-			}
+			opacity = GetOpacity(hwnd);
 			Console.WriteLine("window opacity : " + opacity);
 			return opacity;
 		}
