@@ -26,18 +26,33 @@ public static class ConsoleManager
 		get { return GetConsoleWindow() != IntPtr.Zero; }
 	}
 
-	/// <summary>
-	/// Creates a new console instance if the process is not attached to a console already.
-	/// </summary>
-	public static void Show()
+	public static bool IsShowing { get; private set; }
+	
+	[DllImport("user32.dll")]
+	static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+	const int SW_HIDE = 0;
+	const int SW_SHOW = 5;
+
+	public static void Init()
 	{
-		//#if DEBUG
 		if (!HasConsole)
 		{
 			AllocConsole();
 			InvalidateOutAndError();
 		}
-		//#endif
+	}
+
+	/// <summary>
+	/// Creates a new console instance if the process is not attached to a console already.
+	/// </summary>
+	public static void Show()
+	{
+		if (HasConsole)
+		{
+			ShowWindow(GetConsoleWindow(), SW_SHOW);
+			IsShowing = true;
+		}
 	}
 
 	/// <summary>
@@ -45,18 +60,16 @@ public static class ConsoleManager
 	/// </summary>
 	public static void Hide()
 	{
-		//#if DEBUG
 		if (HasConsole)
 		{
-			SetOutAndErrorNull();
-			FreeConsole();
+			ShowWindow(GetConsoleWindow(), SW_HIDE);
+		IsShowing = false;
 		}
-		//#endif
 	}
 
 	public static void Toggle()
 	{
-		if (HasConsole)
+		if (IsShowing)
 		{
 			Hide();
 		}

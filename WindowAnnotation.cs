@@ -44,14 +44,14 @@ namespace GarterBelt
 			byte opacity = 0;
 			if (cur == 256)
 			{
-				Console.WriteLine("EX스타일이 적용되었습니다");
+				Console.WriteLine("EX Window style applied.");
 				SetWindowLong(hwnd, GWL_EXSTYLE, cur ^ WS_EX_LAYERED);
 				opacity = 255;
 			}
 			else {
 				opacity = GetOpacity(hwnd);
 			}
-			Console.WriteLine("투명도 : " + opacity);
+			Console.WriteLine("window opacity : " + opacity);
 			return opacity;
 		}
 		public static byte GetOpacity(int hwnd)

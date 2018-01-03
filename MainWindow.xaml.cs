@@ -30,7 +30,10 @@ namespace GarterBelt
 
 		public MainWindow()
 		{
-			ConsoleManager.Show();
+			ConsoleManager.Init();
+#if !DEBUG
+			ConsoleManager.Hide();
+#endif
 			InitializeComponent();
 
 			#region key binding
@@ -50,9 +53,18 @@ namespace GarterBelt
 			{
 				ShowGarter();
 			});
+			binder.AddBindHandler("garterToggleConsoleHandler", Keys.F3, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
+			{
+				ToggleConsole();
+			});
 			#endregion
 
 			LoadHandle();
+		}
+
+		private void ToggleConsole()
+		{
+			ConsoleManager.Toggle();
 		}
 
 		private void ShowGarter()
@@ -67,11 +79,13 @@ namespace GarterBelt
 
 		private void SetProcess(GarterProcesses g)
 		{
+			Console.WriteLine(string.Format("프로세스 {0} 대상으로 garterbelt를 초기화합니다.", g.Name));
 			this.pId = g.MainWindowHandle;
 			this.labelHandleId.Content = "PNAME : " + g.Name;
 			var opacity = WindowAnnotation.SetWindowToStyled(pId);
 			this.sliderOpacity.Value = opacity;
 			if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
+			ExportHandle();
 		}
 
 		private void FindHandle(string name)
@@ -92,7 +106,6 @@ namespace GarterBelt
 					}
 				}
 			}
-			ExportHandle();
 		}
 
 		private void ShowByHandle()
@@ -111,11 +124,13 @@ namespace GarterBelt
 		{
 			var lines = string.Empty;
 			Garterbelts garters = Resources["garters"] as Garterbelts;
+			lines += pId.ToString() + '\n';
 			foreach (var item in garters)
 			{
 				lines += item.ToString() + '\n';
 			}
 			File.WriteAllText("id.txt", lines);
+			Console.WriteLine("solution export finished.");
 		}
 
 		private void LoadHandle()
@@ -125,6 +140,7 @@ namespace GarterBelt
 			var temp = File.ReadAllText("id.txt");
 			if (temp == null) return;
 			var lines = temp.Split('\n');
+			int savedHandle = 0; int.TryParse(lines[0], out savedHandle);
 			foreach (var line in lines)
 			{
 				var item = GarterProcesses.LoadFromLine(line);
@@ -132,8 +148,15 @@ namespace GarterBelt
 				if (garters.Any(x => x.ProcessId == item.ProcessId && x.Name == item.Name)) continue;
 				garters.Add(item);
 			}
-
-			if (garters.Count > 0) SetProcess(garters.First());
+			Console.WriteLine("solution import finished.");
+			Console.WriteLine(string.Format("파일에서 불러온 프로세스 수 : {0}", garters.Count.ToString()));
+			Console.WriteLine(string.Format("최근 활성화된 프로세스 핸들 : {0}", savedHandle.ToString()));
+			if (garters.Count > 0)
+			{
+				var query = garters.Where(item => item.MainWindowHandle == savedHandle);
+				if (query.Count() > 0) SetProcess(query.First());
+				else SetProcess(garters.First());
+			}
 		}
 
 		private void OpacityByHandle(byte opacity)
