@@ -33,16 +33,36 @@ namespace GarterBelt
 			//ConsoleManager.Show();
 			InitializeComponent();
 
-			binder.AddBindHandler("Handler1", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
+			#region key binding
+			binder.AddBindHandler("windowHideHandler", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				HideByHandle();
 			});
-			binder.AddBindHandler("Handler2", Keys.F2, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
+			binder.AddBindHandler("windowShowHandler", Keys.F2, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
 			{
 				ShowByHandle();
 			});
+			binder.AddBindHandler("garterHideHandler", Keys.F1, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
+			{
+				HideGarter();
+			});
+			binder.AddBindHandler("garterShowHandler", Keys.F2, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
+			{
+				ShowGarter();
+			});
+			#endregion
 
 			LoadHandle();
+		}
+
+		private void ShowGarter()
+		{
+			this.Show();
+		}
+
+		private void HideGarter()
+		{
+			this.Hide();
 		}
 
 		private void SetProcess(GarterProcesses g)
