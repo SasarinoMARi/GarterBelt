@@ -31,14 +31,14 @@ namespace GarterBelt
 		}
 
 		public static GarterProcesses LoadFromLine(string s) {
-			var cols = s.Split(' ');
+			var cols = s.Split('|');
 			if (cols.Length != 3) return null;
 			return new GarterProcesses(cols[0], cols[1], cols[2]);
 		}
 
 		public override string ToString()
 		{
-			return this.Name + ' ' + this.ProcessId + ' ' + this.MainWindowHandle;
+			return this.Name + '|' + this.ProcessId + '|' + this.MainWindowHandle;
 		}
 	}
 }
