@@ -26,7 +26,7 @@ public static class ConsoleManager
 		get { return GetConsoleWindow() != IntPtr.Zero; }
 	}
 
-	public static bool IsShowing { get; private set; }
+	public static bool IsShowing { get; private set; } = true;
 	
 	[DllImport("user32.dll")]
 	static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
