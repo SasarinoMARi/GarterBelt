@@ -63,7 +63,7 @@ public static class ConsoleManager
 		if (HasConsole)
 		{
 			ShowWindow(GetConsoleWindow(), SW_HIDE);
-		IsShowing = false;
+			IsShowing = false;
 		}
 	}
 

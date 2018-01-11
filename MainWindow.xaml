@@ -61,17 +61,24 @@
                     <StackPanel Margin="90, 0, 0, 0"/>
                     <materialDesign:DialogHost IsOpen="False" >
                         <materialDesign:DialogHost.DialogContent>
-                            <StackPanel  Width="280" Height="200" Margin="10, 10, 10, 10">
+                            <StackPanel  Width="400" Height="300" Margin="10, 10, 10, 10">
                                 <TextBlock Margin="10, 10, 10, 10" LineHeight="25">
-                                    Garterbelt v 1.0.0
-                                    <LineBreak/>
-                                     Composed by 
+                                    Garterbelt v 1.0.0 Composed by 
                                     <Hyperlink NavigateUri="https://twitter.com/SasarinoMARi" RequestNavigate="Hyperlink_RequestNavigate">SasarinoMARi</Hyperlink>
                                     <LineBreak/>
                                     <LineBreak/>
                                     가터벨트 너무 좋아!
                                     <LineBreak/>
                                     회사에서 몰래 게임하려고 만들었어요.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    이런 정보창은 어짜피 아무도 안 볼 줄 알았는데 의외네요?
+                                    <LineBreak/>
+                                    보답으로 좋은걸 알려드릴게요.
+                                    <LineBreak/>
+                                    Ctrl + F1, F2버튼을 눌러서 가터벨트 창을 숨길 수 있어요!
+                                    <LineBreak/>
+                                    도움이 되었으면 좋겠어요.
                                 </TextBlock>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <Button Content="닫기" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
