@@ -24,7 +24,7 @@
         <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
             <StackPanel Margin="5, 5, 5, 5" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <materialDesign:DialogHost x:Name="dialogFindWindow" IsOpen="False" >
+                    <materialDesign:DialogHost IsOpen="False" >
                         <materialDesign:DialogHost.DialogContent>
                             <StackPanel  Width="280" Height="120" Margin="10, 10, 10, 10">
                                 <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
@@ -51,12 +51,40 @@
                                 </ListView>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <Button x:Name="buttonSDOk"  Content="선택" Margin="5, 5, 5, 5" Click="Button_SelectDialog_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
-                                    <Button x:Name="buttonSDRemove"  Content="삭제" Margin="5, 5, 5, 5" Click="Button_SelectDialog_Click"/>
+                                    <Button x:Name="buttonSDRemove"  Content="삭제" Margin="5, 5, 5, 5" Click="Button_SelectDialog_Click" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
                                     <Button Content="닫기" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
                                 </StackPanel>
                             </StackPanel>
                         </materialDesign:DialogHost.DialogContent>
                         <Button x:Name="buttonLoadHandle" Content="핸들 목록" Margin="5, 5, 5, 5" Click="Button_Click_Common" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                    </materialDesign:DialogHost>
+                    <StackPanel Margin="90, 0, 0, 0"/>
+                    <materialDesign:DialogHost IsOpen="False" >
+                        <materialDesign:DialogHost.DialogContent>
+                            <StackPanel  Width="280" Height="200" Margin="10, 10, 10, 10">
+                                <TextBlock Margin="10, 10, 10, 10" LineHeight="25">
+                                    Garterbelt v 1.0.0
+                                    <LineBreak/>
+                                     Composed by 
+                                    <Hyperlink NavigateUri="https://twitter.com/SasarinoMARi" RequestNavigate="Hyperlink_RequestNavigate">SasarinoMARi</Hyperlink>
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    가터벨트 너무 좋아!
+                                    <LineBreak/>
+                                    회사에서 몰래 게임하려고 만들었어요.
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <Button Content="닫기" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:DialogHost.DialogContent>
+                        <Button Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                            <Viewbox Width="24" Height="24"  >
+                                <Canvas Width="24" Height="24">
+                                    <Path Data="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" Fill="White" />
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
                     </materialDesign:DialogHost>
                 </StackPanel>
             </StackPanel>

@@ -77,13 +77,25 @@ namespace GarterBelt
 
 		private void SetProcess(GarterProcesses g)
 		{
-			Console.WriteLine(string.Format("프로세스 {0} 대상으로 garterbelt를 초기화합니다.", g.Name));
-			this.pId = g.MainWindowHandle;
-			this.labelHandleId.Content = "활성화된 프로세스 : " + g.Name;
-			var opacity = WindowAnnotation.SetWindowToStyled(pId);
-			this.sliderOpacity.Value = opacity;
-			if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
-			ExportHandle();
+			if (g == null)
+			{
+				Console.WriteLine("선택된 프로세스가 없습니다.");
+				this.pId = 0;
+				this.labelHandleId.Content = "선택된 프로세스가 없습니다.";
+				this.sliderOpacity.Value = this.sliderOpacity.Maximum;
+				this.panelMainControls.IsEnabled = false;
+				ExportHandle();
+			}
+			else
+			{
+				Console.WriteLine(string.Format("프로세스 {0} 대상으로 garterbelt를 초기화합니다.", g.Name));
+				this.pId = g.MainWindowHandle;
+				this.labelHandleId.Content = "활성화된 프로세스 : " + g.Name;
+				var opacity = WindowAnnotation.SetWindowToStyled(pId);
+				this.sliderOpacity.Value = opacity;
+				if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
+				ExportHandle();
+			}
 		}
 		private void FindHandle(string name)
 		{
@@ -213,6 +225,7 @@ namespace GarterBelt
 			{
 				Garterbelts garters = Resources["garters"] as Garterbelts;
 				garters.Remove(this.listview_garters.SelectedItem as GarterProcesses);
+				SetProcess(null);
 			}
 		}
 		private void TextBoxProcessName_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -235,7 +248,13 @@ namespace GarterBelt
 				DialogHost.CloseDialogCommand.Execute(null, null);
 			}
 		}
+		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+			e.Handled = true;
+		}
 
 		#endregion
+
 	}
 }
