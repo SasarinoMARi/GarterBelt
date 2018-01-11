@@ -62,32 +62,29 @@ namespace GarterBelt
 			LoadHandle();
 		}
 
-		private void ToggleConsole()
-		{
-			ConsoleManager.Toggle();
-		}
-
 		private void ShowGarter()
 		{
 			this.Show();
 		}
-
 		private void HideGarter()
 		{
 			this.Hide();
+		}
+		private void ToggleConsole()
+		{
+			ConsoleManager.Toggle();
 		}
 
 		private void SetProcess(GarterProcesses g)
 		{
 			Console.WriteLine(string.Format("프로세스 {0} 대상으로 garterbelt를 초기화합니다.", g.Name));
 			this.pId = g.MainWindowHandle;
-			this.labelHandleId.Content = "PNAME : " + g.Name;
+			this.labelHandleId.Content = "활성화된 프로세스 : " + g.Name;
 			var opacity = WindowAnnotation.SetWindowToStyled(pId);
 			this.sliderOpacity.Value = opacity;
 			if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
 			ExportHandle();
 		}
-
 		private void FindHandle(string name)
 		{
 			Process[] processRunning = Process.GetProcesses();
@@ -108,18 +105,6 @@ namespace GarterBelt
 			}
 		}
 
-		private void ShowByHandle()
-		{
-			if (pId == 0) return;
-			WindowAnnotation.ShowWindow(pId, WindowAnnotation.WindowState.SW_SHOW);
-		}
-
-		private void HideByHandle()
-		{
-			if (pId == 0) return;
-			WindowAnnotation.ShowWindow(pId, WindowAnnotation.WindowState.SW_HIDE);
-		}
-
 		private void ExportHandle()
 		{
 			var lines = string.Empty;
@@ -132,7 +117,6 @@ namespace GarterBelt
 			File.WriteAllText("id.txt", lines);
 			Console.WriteLine("solution export finished.");
 		}
-
 		private void LoadHandle()
 		{
 			if (!File.Exists("id.txt")) return;
@@ -159,7 +143,6 @@ namespace GarterBelt
 				else SetProcess(garters.First());
 			}
 		}
-
 		private bool ValidateHandle(int processId)
 		{
 			bool isValidate = true;
@@ -174,63 +157,85 @@ namespace GarterBelt
 			return isValidate;
 		}
 
+		private void ShowByHandle()
+		{
+			if (pId == 0) return;
+			WindowAnnotation.ShowWindow(pId, WindowAnnotation.WindowState.SW_SHOW);
+		}
+		private void HideByHandle()
+		{
+			if (pId == 0) return;
+			WindowAnnotation.ShowWindow(pId, WindowAnnotation.WindowState.SW_HIDE);
+		}
+		private void DisableTopmostByHandle()
+		{
+			WindowAnnotation.SetTopmost(pId, false);
+		}
+		private void TopmostByHandle()
+		{
+			WindowAnnotation.SetTopmost(pId, true);
+		}
 		private void OpacityByHandle(byte opacity)
 		{
 			WindowAnnotation.SetOpacity(pId, opacity);
 		}
 
-		private void NoTopmostByHandle()
-		{
-			WindowAnnotation.SetTopmost(pId, false);
-		}
+		#region UI Interactions
 
-		private void TopmostByHandle()
-		{
-			WindowAnnotation.SetTopmost(pId, true);
-		}
-
-		private void button_Click(object sender, RoutedEventArgs e)
+		private void Button_Click_Common(object sender, RoutedEventArgs e)
 		{
 			if (sender == this.buttonHideByHandle) HideByHandle();
 			if (sender == this.buttonShowByHandle) ShowByHandle();
 
 			if (sender == this.buttonTopmost) TopmostByHandle();
-			if (sender == this.buttonNoTopmost) NoTopmostByHandle();
+			if (sender == this.buttonNoTopmost) DisableTopmostByHandle();
 		}
-
-		private void sliderOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void SliderOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			OpacityByHandle(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
 		}
-
-		private void button_FindProcessDialogOK_Click(object sender, RoutedEventArgs e)
+		private void Button_FindProcessDialogOK_Click(object sender, RoutedEventArgs e)
 		{
 			var pName = this.textBoxProcessName.Text;
 			if (string.IsNullOrWhiteSpace(pName)) return;
 			FindHandle(pName);
+			this.textBoxProcessName.Text = string.Empty;
 		}
-
-		private void button_SelectDialog_Click(object sender, RoutedEventArgs e)
+		private void Button_SelectDialog_Click(object sender, RoutedEventArgs e)
 		{
 			if (sender == this.buttonSDOk)
 			{
-				var g = this.listView.SelectedItem as GarterProcesses;
+				var g = this.listview_garters.SelectedItem as GarterProcesses;
 				if (g == null) return;
 				SetProcess(g);
 			}
 			if (sender == this.buttonSDRemove)
 			{
 				Garterbelts garters = Resources["garters"] as Garterbelts;
-				garters.Remove(this.listView.SelectedItem as GarterProcesses);
+				garters.Remove(this.listview_garters.SelectedItem as GarterProcesses);
 			}
 		}
-
-		private void textBoxProcessName_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		private void TextBoxProcessName_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
-				typeof(System.Windows.Controls.Primitives.ButtonBase).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(buttonDialogOK, new object[0]);
+				Button_FindProcessDialogOK_Click(null, null);
+				DialogHost.CloseDialogCommand.Execute(null, null);
 			}
 		}
+		private void Listitem_DoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			Button_SelectDialog_Click(buttonSDOk, null);
+			DialogHost.CloseDialogCommand.Execute(null, null);
+		}
+		private void Grid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape)
+			{
+				DialogHost.CloseDialogCommand.Execute(null, null);
+			}
+		}
+
+		#endregion
 	}
 }
