@@ -14,7 +14,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Icon="icon.ico"
-        Title="Remotcon" Height="300" Width="400"
+        Title="Garterbelt" Height="300" Width="400"
         Topmost="True"
         ResizeMode="CanMinimize">
     <Window.Resources>
