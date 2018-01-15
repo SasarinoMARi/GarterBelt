@@ -99,6 +99,7 @@ namespace GarterBelt
 		}
 		private void FindHandle(string name)
 		{
+			name = name.ToLower();
 			Process[] processRunning = Process.GetProcesses();
 			foreach (Process p in processRunning)
 			{
