@@ -6,6 +6,10 @@
 
 <br/>
 
+[다운로드 페이지로](https://github.com/Usagination/GarterBelt/releases/latest)
+
+<br/>
+
 ## 사용법
 
 우선 '핸들 찾기' 버튼을 눌러 프로세스를 찾은 뒤에 사용할 수 있어요.
