@@ -142,7 +142,7 @@ namespace GarterBelt
 			{
 				var item = GarterProcesses.LoadFromLine(line);
 				if (item == null) continue;
-				if (!ValidateHandle(item.ProcessId)) continue;
+				if (!ValidateHandle(item)) continue;
 				if (garters.Any(x => x.ProcessId == item.ProcessId && x.Name == item.Name)) continue;
 				garters.Add(item);
 			}
@@ -156,16 +156,16 @@ namespace GarterBelt
 				else SetProcess(garters.First());
 			}
 		}
-		private bool ValidateHandle(int processId)
+		private bool ValidateHandle(GarterProcesses garter)
 		{
-			bool isValidate = true;
+			bool isValidate = false;
 			try
 			{
-				var p = Process.GetProcessById(processId);
+				var p = Process.GetProcessById(garter.ProcessId);
+				if (p.ProcessName.ToLower().Equals(garter.Name.ToLower())) isValidate = true;
 			}
 			catch
 			{
-				isValidate = false;
 			}
 			return isValidate;
 		}
