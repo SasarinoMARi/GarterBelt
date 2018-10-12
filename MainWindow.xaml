@@ -35,7 +35,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </materialDesign:DialogHost.DialogContent>
-                        <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="핸들 찾기" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
+                        <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="윈도우 찾기" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
                     </materialDesign:DialogHost>
                     <materialDesign:DialogHost IsOpen="False" >
                         <materialDesign:DialogHost.DialogContent>
@@ -56,29 +56,33 @@
                                 </StackPanel>
                             </StackPanel>
                         </materialDesign:DialogHost.DialogContent>
-                        <Button x:Name="buttonLoadHandle" Content="핸들 목록" Margin="5, 5, 5, 5" Click="Button_Click_Common" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
+                        <Button x:Name="buttonLoadHandle" Content="저장된 윈도우 목록" Margin="5, 5, 5, 5" Click="Button_Click_Common" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
                     </materialDesign:DialogHost>
-                    <StackPanel Margin="90, 0, 0, 0"/>
+                    <StackPanel Margin="30, 0, 0, 0"/>
                     <materialDesign:DialogHost IsOpen="False" >
                         <materialDesign:DialogHost.DialogContent>
-                            <StackPanel  Width="400" Height="300" Margin="10, 10, 10, 10">
+                            <StackPanel  Width="600" Height="350" Margin="10, 10, 10, 10">
                                 <TextBlock Margin="10, 10, 10, 10" LineHeight="25">
-                                    Garterbelt v 1.0.0 Composed by 
+                                    <!--누가 버전을 이따위로 기록해놔 과거의 나 개1새끼야-->
+                                    Garterbelt v 1.0.1 Composed by 
                                     <Hyperlink NavigateUri="https://twitter.com/SasarinoMARi" RequestNavigate="Hyperlink_RequestNavigate">SasarinoMARi</Hyperlink>
                                     <LineBreak/>
                                     <LineBreak/>
-                                    가터벨트 너무 좋아!
+                                    가터벨트 완전 좋아!
                                     <LineBreak/>
-                                    회사에서 몰래 게임하려고 만들었어요.
+                                    이 프로그램은 회사에서 몰래 게임을 하기 위해서 태어났어요.
                                     <LineBreak/>
                                     <LineBreak/>
-                                    이런 정보창은 어짜피 아무도 안 볼 줄 알았는데 의외네요?
+                                    이런 정보창은 아무도 안볼거라 생각했는데 의외에요.
                                     <LineBreak/>
-                                    보답으로 좋은걸 알려드릴게요.
+                                    보답으로 좋은걸 알려드릴게요. Ctrl + F1, F2버튼을 눌러서 가터벨트 창을 숨길 수 있어요!
                                     <LineBreak/>
-                                    Ctrl + F1, F2버튼을 눌러서 가터벨트 창을 숨길 수 있어요!
+                                    그치만 Ctrl + F3은 절대로 누르면 안돼요! 그리고 Ctrl + F4를 누르면 굉장한 일이 일어나요.
                                     <LineBreak/>
-                                    도움이 되었으면 좋겠어요.
+                                    <LineBreak/>
+                                    관리자 권한으로 실행된 창은 Garterbelt를 관리자 권한으로 실행해야만 다룰 수 있어요.
+                                    <LineBreak/>
+                                    모쪼록 이 프로그램이 도움이 되었으면 좋겠네요 (´・ω・`)
                                 </TextBlock>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <Button Content="닫기" Margin="5, 5, 5, 5" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
