@@ -29,6 +29,9 @@ namespace GarterBelt
         Garterbelt garter = null;
         GlobalHotkeyBinder binder = new GlobalHotkeyBinder();
 
+        string savedir, path;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -56,6 +59,12 @@ namespace GarterBelt
             });
             #endregion
 
+            savedir = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                Assembly.GetEntryAssembly().GetName().Name
+            );
+            path = System.IO.Path.Combine(savedir, "handles");
+            if (!Directory.Exists(savedir)) Directory.CreateDirectory(savedir);
             LoadHandle();
         }
 
@@ -126,19 +135,17 @@ namespace GarterBelt
             }
         }
 
-        string filepath = "id";
-
         private void ExportHandle()
         {
             ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-            Garterbelt.SerializeObject(garters.ToList(), filepath);
+            Garterbelt.SerializeObject(garters.ToList(), path);
             Console.WriteLine("session export successfully.");
         }
         private void LoadHandle()
         {
-            if (!File.Exists(filepath)) return;
+            if (!File.Exists(path)) return;
             ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-            var saved = Garterbelt.DeserializeObject(filepath);
+            var saved = Garterbelt.DeserializeObject(path);
             if (saved == null || saved.Count == 0) return;
             Garterbelt recent = saved[0];
             foreach (var garter in saved)
