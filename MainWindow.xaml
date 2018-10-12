@@ -18,7 +18,7 @@
         Topmost="True"
         ResizeMode="CanMinimize">
     <Window.Resources>
-        <local:Garterbelts x:Key="garters" />
+        <local:ObservableGarterbelt x:Key="garters" />
     </Window.Resources>
     <Grid KeyDown="Grid_KeyDown">
         <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">

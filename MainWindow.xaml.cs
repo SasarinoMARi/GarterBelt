@@ -25,7 +25,7 @@ namespace GarterBelt
     /// </summary>
     public partial class MainWindow : Window
     {
-        GarterProcess garter = null;
+        Garterbelt garter = null;
         GlobalHotkeyBinder binder = new GlobalHotkeyBinder();
 
         public MainWindow()
@@ -75,7 +75,7 @@ namespace GarterBelt
             ConsoleManager.Toggle();
         }
 
-        private void SetProcess(GarterProcess g)
+        private void SetProcess(Garterbelt g)
         {
             this.garter = g;
             if (g == null)
@@ -90,7 +90,7 @@ namespace GarterBelt
             {
                 Console.WriteLine(string.Format("프로세스 {0} 대상으로 garterbelt를 초기화합니다.", g.Name));
                 this.labelHandleId.Content = "활성화된 프로세스 : " + g.Name;
-                var opacity = WindowsProperty.SetWindowToStyled(garter.MainWindowHandle);
+                var opacity = WindowsProperty.SetWindowToStyled(garter.Processes[0].MainWindowHandle);
                 this.sliderOpacity.Value = opacity;
                 if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
                 ExportHandle();
@@ -100,18 +100,30 @@ namespace GarterBelt
         {
             name = name.ToLower();
             Process[] processRunning = Process.GetProcesses();
+            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
             foreach (Process p in processRunning)
             {
                 if (p.MainWindowHandle.ToInt32() == 0) continue;
                 if (p.ProcessName.ToLower().Contains(name))
                 {
-                    Garterbelts garters = Resources["garters"] as Garterbelts;
-                    if (garters.Any(x => x.ProcessId == p.Id && x.Name == p.ProcessName)) continue;
+                    if (garters.Any(x => x.ContainProcess(p)))
+                    {
+                        continue;
+                    }
                     else
                     {
-                        var g = new GarterProcess(p);
-                        garters.Add(g);
-                        SetProcess(g);
+                        var query = garters.Where(x => x.Name == p.ProcessName);
+                        if (query.Count() > 0)
+                        {
+                            query.First().AttatchGarterbelt(p);
+                            SetProcess(query.First());
+                        }
+                        else
+                        {
+                            var g = new Garterbelt(p);
+                            garters.Add(g);
+                            SetProcess(g);
+                        }
                     }
                 }
             }
@@ -121,21 +133,21 @@ namespace GarterBelt
 
         private void ExportHandle()
         {
-            Garterbelts garters = Resources["garters"] as Garterbelts;
-            GarterProcess.SerializeObject(garters.ToList(), filepath);
+            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
+            Garterbelt.SerializeObject(garters.ToList(), filepath);
             Console.WriteLine("session export successfully.");
         }
         private void LoadHandle()
         {
             if (!File.Exists(filepath)) return;
-            Garterbelts garters = Resources["garters"] as Garterbelts;
-            var saved = GarterProcess.DeserializeObject(filepath);
+            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
+            var saved = Garterbelt.DeserializeObject(filepath);
             if (saved == null || saved.Count == 0) return;
-            GarterProcess recent = saved[0];
+            Garterbelt recent = saved[0];
             foreach (var garter in saved)
             {
                 if (!ValidateHandle(garter)) continue;
-                if (garters.Any(x => x.ProcessId == garter.ProcessId && x.Name == garter.Name)) continue;
+                //if (garters.Any(x => x.ContainProcess(garter) == garter.ProcessId && x.Name == garter.Name)) continue;
                 garters.Add(garter);
             }
             Console.WriteLine("session import successfully.");
@@ -143,49 +155,68 @@ namespace GarterBelt
             Console.WriteLine(string.Format("recent activated GarterProcess : {0}", recent.ToString()));
             if (garters.Count > 0)
             {
-                var query = garters.Where(item => item.MainWindowHandle == recent.MainWindowHandle);
-                if (query.Count() > 0) SetProcess(query.First());
-                else SetProcess(garters.First());
+                //var query = garters.Where(item => item.MainWindowHandle == recent.MainWindowHandle);
+                //if (query.Count() > 0) SetProcess(query.First());
+                //else 
+                SetProcess(garters.First());
             }
         }
-        private bool ValidateHandle(GarterProcess garter)
+        private bool ValidateHandle(Garterbelt garter)
         {
-            bool isValidate = false;
             try
             {
-                var p = Process.GetProcessById(garter.ProcessId);
-                if (p.ProcessName.ToLower().Equals(garter.Name.ToLower())) isValidate = true;
+                foreach (var x in garter.Processes)
+                {
+                    var p = Process.GetProcessById(x.ProcessId);
+                    if (p != null) return true;
+                }
             }
             catch
             {
+
             }
-            return isValidate;
+            return false;
         }
 
         private void ShowByHandle()
         {
             if (garter == null) return;
-            WindowsProperty.ShowWindow(garter.MainWindowHandle);
+            foreach (var p in garter.Processes)
+            {
+                WindowsProperty.ShowWindow(p.MainWindowHandle);
+            }
         }
         private void HideByHandle()
         {
             if (garter == null) return;
-            WindowsProperty.HideWindow(garter.MainWindowHandle);
+            foreach (var p in garter.Processes)
+            {
+                WindowsProperty.HideWindow(p.MainWindowHandle);
+            }
         }
         private void DisableTopmostByHandle()
         {
             if (garter == null) return;
-            WindowsProperty.SetTopmost(garter.MainWindowHandle, false);
+            foreach (var p in garter.Processes)
+            {
+                WindowsProperty.SetTopmost(p.MainWindowHandle, false);
+            }
         }
         private void TopmostByHandle()
         {
             if (garter == null) return;
-            WindowsProperty.SetTopmost(garter.MainWindowHandle, true);
+            foreach (var p in garter.Processes)
+            {
+                WindowsProperty.SetTopmost(p.MainWindowHandle, true);
+            }
         }
         private void OpacityByHandle(byte opacity)
         {
             if (garter == null) return;
-            WindowsProperty.SetOpacity(garter.MainWindowHandle, opacity);
+            foreach (var p in garter.Processes)
+            {
+                WindowsProperty.SetOpacity(p.MainWindowHandle, opacity);
+            }
         }
 
         #region UI Interactions
@@ -213,14 +244,14 @@ namespace GarterBelt
         {
             if (sender == this.buttonSDOk)
             {
-                var g = this.listview_garters.SelectedItem as GarterProcess;
+                var g = this.listview_garters.SelectedItem as Garterbelt;
                 if (g == null) return;
                 SetProcess(g);
             }
             if (sender == this.buttonSDRemove)
             {
-                Garterbelts garters = Resources["garters"] as Garterbelts;
-                garters.Remove(this.listview_garters.SelectedItem as GarterProcess);
+                ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
+                garters.Remove(this.listview_garters.SelectedItem as Garterbelt);
                 SetProcess(null);
             }
         }
