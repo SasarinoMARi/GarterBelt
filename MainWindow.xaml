@@ -24,7 +24,7 @@
         <StackPanel  Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
             <StackPanel Margin="5, 5, 5, 5" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <materialDesign:DialogHost IsOpen="False" >
+                    <materialDesign:DialogHost IsOpen="False" x:Name="searchWIndow" >
                         <materialDesign:DialogHost.DialogContent>
                             <StackPanel  Width="280" Height="120" Margin="10, 10, 10, 10">
                                 <Label Margin="5, 5, 5, 5" Content="검색할 프로세스 이름을 입력해주세요." />
@@ -37,7 +37,7 @@
                         </materialDesign:DialogHost.DialogContent>
                         <Button x:Name="buttonFindHandle" Margin="5, 5, 5, 5" Content="윈도우 찾기" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
                     </materialDesign:DialogHost>
-                    <materialDesign:DialogHost IsOpen="False" >
+                    <materialDesign:DialogHost IsOpen="False"  x:Name="listWindow" >
                         <materialDesign:DialogHost.DialogContent>
                             <StackPanel  Width="500" Height="400" Margin="10, 10, 10, 10">
                                 <ListView x:Name="listview_garters" HorizontalAlignment="Left" Width="500" Height="350" VerticalAlignment="Top" ItemsSource="{Binding Source={StaticResource garters}}" SelectionMode="Single" MouseDoubleClick="Listitem_DoubleClick">
@@ -59,7 +59,7 @@
                         <Button x:Name="buttonLoadHandle" Content="저장된 윈도우 목록" Margin="5, 5, 5, 5" Click="Button_Click_Common" Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"/>
                     </materialDesign:DialogHost>
                     <StackPanel Margin="30, 0, 0, 0"/>
-                    <materialDesign:DialogHost IsOpen="False" >
+                    <materialDesign:DialogHost IsOpen="False" x:Name="informationWindow">
                         <materialDesign:DialogHost.DialogContent>
                             <StackPanel  Width="600" Height="350" Margin="10, 10, 10, 10">
                                 <TextBlock Margin="10, 10, 10, 10" LineHeight="25">

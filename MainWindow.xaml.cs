@@ -257,25 +257,35 @@ namespace GarterBelt
             if (e.Key == Key.Return)
             {
                 Button_FindProcessDialogOK_Click(null, null);
-                DialogHost.CloseDialogCommand.Execute(null, null);
+                closeAllDialogs();
             }
         }
         private void Listitem_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             Button_SelectDialog_Click(buttonSDOk, null);
-            DialogHost.CloseDialogCommand.Execute(null, null);
+            closeAllDialogs();
         }
         private void Grid_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                DialogHost.CloseDialogCommand.Execute(null, null);
+                closeAllDialogs();
             }
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void closeAllDialogs()
+        {
+            // RoutedCommand(DialogHost.CloseDialogCommand) does not work after libraries merged.
+            // DialogHost.CloseDialogCommand.Execute(null, null);
+
+            searchWIndow.IsOpen = false;
+            listWindow.IsOpen = false;
+            informationWindow.IsOpen = false;
         }
 
         #endregion
