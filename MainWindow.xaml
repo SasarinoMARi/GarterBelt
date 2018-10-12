@@ -44,8 +44,8 @@
                                     <ListView.View>
                                         <GridView AllowsColumnReorder="True">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="pName" Width="280"/>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ProcessId}" Header="pHandle" Width="100" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=MainWindowHandle}" Header="wHandle" Width="100" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Processes[0].ProcessId}" Header="pHandle" Width="100" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Processes[0].MainWindowHandle}" Header="wHandle" Width="100" />
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
