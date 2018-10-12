@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace GarterBelt
 {
-	class WindowAnnotation
+	class WindowsProperty
 	{
-		public enum WindowState { SW_HIDE = 0, SW_SHOWNORMAL = 1, SW_NORMAL = 1, SW_SHOWMINIMIZED = 2, SW_SHOWMAXIMIZED = 3, SW_MAXIMIZED = 3, SW_SHOWNOACTIVE = 4, SW_SHOW = 5, SW_MINIMIZED = 6, SW_SHOWMININOACTIVE = 7, SW_SHOWNA = 8, SW_RESTORE = 9, SW_SHOWDEFAULT = 10, SW_FORCEMINIMIZED = 11, SW_MAX = 11 }
+        #region Interop Methods
+
+        enum WindowState { SW_HIDE = 0, SW_SHOWNORMAL = 1, SW_NORMAL = 1, SW_SHOWMINIMIZED = 2, SW_SHOWMAXIMIZED = 3, SW_MAXIMIZED = 3, SW_SHOWNOACTIVE = 4, SW_SHOW = 5, SW_MINIMIZED = 6, SW_SHOWMININOACTIVE = 7, SW_SHOWNA = 8, SW_RESTORE = 9, SW_SHOWDEFAULT = 10, SW_FORCEMINIMIZED = 11, SW_MAX = 11 }
 
 		[DllImport("User32")]
-		public static extern int ShowWindow(int hwnd, WindowState nCmdShow);
+		static extern int ShowWindow(int hwnd, WindowState nCmdShow);
 
 		[DllImport("user32.dll")]
 		static extern bool SetLayeredWindowAttributes(int hwnd, uint crKey, byte bAlpha, uint dwFlags);
@@ -20,10 +22,10 @@ namespace GarterBelt
 		static extern bool GetLayeredWindowAttributes(int hwnd, out uint crKey, out byte bAlpha, out uint dwFlags);
 
 		[DllImport("user32")]
-		public static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
+		static extern Int32 GetWindowLong(int hWnd, Int32 nIndex);
 
 		[DllImport("user32")]
-		public static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
+        static extern Int32 SetWindowLong(int hWnd, Int32 nIndex, Int32 dwNewLong);
 
 		public const int GWL_EXSTYLE = -20;
 		public const int WS_EX_LAYERED = 0x80000;
@@ -38,7 +40,19 @@ namespace GarterBelt
 		private const int SWP_NOMOVE = 0x0002;
 		private const int SWP_NOSIZE = 0x0001;
 
-		public static int SetWindowToStyled(int hwnd)
+# endregion
+
+        public static int ShowWindow(int hwnd)
+        {
+            return ShowWindow(hwnd, WindowState.SW_SHOW);
+        }
+
+        public static int HideWindow(int hwnd)
+        {
+            return ShowWindow(hwnd, WindowState.SW_HIDE);
+        }
+
+        public static int SetWindowToStyled(int hwnd)
 		{
 			var cur = GetWindowLong(hwnd, GWL_EXSTYLE);
 			byte opacity = 0;
@@ -52,6 +66,7 @@ namespace GarterBelt
 			Console.WriteLine("window opacity : " + opacity);
 			return opacity;
 		}
+
 		public static byte GetOpacity(int hwnd)
 		{
 			uint crKey, dwFlags;

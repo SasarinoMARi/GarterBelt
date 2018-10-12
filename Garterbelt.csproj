@@ -82,6 +82,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -102,9 +103,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ConsoleManager.cs" />
-    <Compile Include="GarterProcesses.cs" />
+    <Compile Include="GarterProcess.cs" />
     <Compile Include="GlobalHotkeyBinder.cs" />
-    <Compile Include="WindowAnnotation.cs" />
+    <Compile Include="WindowsProperty.cs" />
+    <Compile Include="WindowsHandler.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
