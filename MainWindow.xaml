@@ -64,7 +64,7 @@
                             <StackPanel  Width="600" Height="350" Margin="10, 10, 10, 10">
                                 <TextBlock Margin="10, 10, 10, 10" LineHeight="25">
                                     <!--누가 버전을 이따위로 기록해놔 과거의 나 개1새끼야-->
-                                    Garterbelt v 1.0.1 Composed by 
+                                    Garterbelt v 1.0.3 Composed by 
                                     <Hyperlink NavigateUri="https://twitter.com/SasarinoMARi" RequestNavigate="Hyperlink_RequestNavigate">SasarinoMARi</Hyperlink>
                                     <LineBreak/>
                                     <LineBreak/>

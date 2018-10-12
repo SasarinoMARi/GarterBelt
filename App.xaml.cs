@@ -13,5 +13,7 @@ namespace GarterBelt
 	/// </summary>
 	public partial class App : Application
 	{
+        // this class is not using
+        // check Program.cs
 	}
 }

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Application = System.Windows.Application;
 
 namespace GarterBelt
 {
@@ -30,10 +31,6 @@ namespace GarterBelt
 
         public MainWindow()
         {
-            ConsoleManager.Init();
-#if !DEBUG
-			ConsoleManager.Hide();
-#endif
             InitializeComponent();
 
             #region key binding
