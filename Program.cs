@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace GarterBelt
 {
@@ -65,37 +66,7 @@ namespace GarterBelt
 
         private static void startWithoutArgs()
         {
-            // Debug console initializer
-            ConsoleManager.Init();
-#if !DEBUG
-            ConsoleManager.Hide();
-#endif
-
-            var application = new Application
-            {
-                StartupUri = new Uri("MainWindow.xaml", UriKind.RelativeOrAbsolute)
-            };
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml",
-                UriKind.RelativeOrAbsolute)
-            });
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml",
-                UriKind.RelativeOrAbsolute)
-            });
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml",
-                UriKind.RelativeOrAbsolute)
-            });
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml",
-                UriKind.RelativeOrAbsolute)
-            });
-            application.Run();
+            System.Windows.Forms.Application.Run(new GarterGUIContext());
         }
 
         private static void ResolveMergedLibraries()
@@ -112,6 +83,25 @@ namespace GarterBelt
                     return Assembly.Load(assemblyData);
                 }
             };
+        }
+
+        private static void InitializeConsole()
+        {
+            // Not fucking need
+            ConsoleManager.Init();
+#if !DEBUG
+            ConsoleManager.Hide();
+#endif
+        }
+    }
+
+    public class GarterGUIContext : ApplicationContext
+    {
+        public GarterGUIContext()
+        {
+            var f = new GUI.GarterGUI();
+            f.FormClosed += delegate { ExitThread(); };
+            f.Show();
         }
     }
 }

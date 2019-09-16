@@ -61,44 +61,11 @@ namespace GarterBelt.Properties {
         }
         
         /// <summary>
-        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        ///   프로세스 이름을 입력해 주세요.과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
-        public static byte[] MaterialDesignColors {
+        public static string InputProcessName {
             get {
-                object obj = ResourceManager.GetObject("MaterialDesignColors", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        public static byte[] MaterialDesignThemes_Wpf {
-            get {
-                object obj = ResourceManager.GetObject("MaterialDesignThemes_Wpf", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   &lt;?xml version=&quot;1.0&quot;?&gt;
-        ///&lt;doc&gt;
-        ///    &lt;assembly&gt;
-        ///        &lt;name&gt;MaterialDesignThemes.Wpf&lt;/name&gt;
-        ///    &lt;/assembly&gt;
-        ///    &lt;members&gt;
-        ///        &lt;member name=&quot;T:ControlzEx.PackIconBase`1&quot;&gt;
-        ///            &lt;summary&gt;
-        ///            Base class for creating an icon control for icon packs.
-        ///            &lt;/summary&gt;
-        ///            &lt;typeparam name=&quot;TKind&quot;&gt;&lt;/typeparam&gt;
-        ///        &lt;/member&gt;
-        ///        &lt;member name=&quot;M:ControlzEx.PackIconBase`1.#ctor(System.Func{System.Collections.Generic.IDictionary{`0,System.String}})&quot;&gt;
-        ///            &lt;param [나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
-        /// </summary>
-        public static string MaterialDesignThemes_Wpf1 {
-            get {
-                return ResourceManager.GetString("MaterialDesignThemes_Wpf1", resourceCulture);
+                return ResourceManager.GetString("InputProcessName", resourceCulture);
             }
         }
     }

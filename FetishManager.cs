@@ -11,15 +11,17 @@ namespace GarterBelt
 {
     class FetishManager
     {
-        private List<Garterbelt> GetFetish(string precessName)
+        public List<Garterbelt> GetFetishes(string processName = null)
         {
-            precessName = precessName.ToLower();
-            var processRunning = Process.GetProcesses();
             var garters = LoadFetish();
+            if (processName == null) return garters;
+
+            processName = processName.ToLower();
+            var processRunning = Process.GetProcesses();
             foreach (Process p in processRunning)
             {
                 if (p.MainWindowHandle.ToInt32() == 0) continue;
-                if (p.ProcessName.ToLower().Contains(precessName))
+                if (p.ProcessName.ToLower().Contains(processName))
                 {
                     if (garters.Any(x => x.ContainProcess(p)))
                     {
@@ -47,7 +49,7 @@ namespace GarterBelt
 
         public Garterbelt FindFetish(string processName)
         {
-            foreach (var garterbelt in GetFetish(processName))
+            foreach (var garterbelt in GetFetishes(processName))
             {
                 if (garterbelt.Name.ToLower().Contains(
                     processName.ToLower())) return garterbelt;

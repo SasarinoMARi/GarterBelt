@@ -15,7 +15,7 @@ namespace GarterBelt
 
 		}
 
-		public void AddBindHandler(string name, Keys key, ModifierKeys modifiers, Action<object, KeyPressedEventArgs> callback)
+		public void AddBindHandler(string name, Keys key, int modifiers, Action<object, KeyPressedEventArgs> callback)
 		{
 			var hook = new KeyboardHook();
 			hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(callback);
@@ -77,7 +77,7 @@ namespace GarterBelt
 				};
 			}
 
-			public void RegisterHotKey(ModifierKeys modifier, Keys key)
+			public void RegisterHotKey(int modifier, Keys key)
 			{
 				_currentId = _currentId + 1;
 
@@ -128,11 +128,12 @@ namespace GarterBelt
 	[Flags]
 	public enum ModifierKeys : uint
 	{
-		Alt = 1,
-		Control = 2,
-		Shift = 4,
-		Win = 8
-	}
+        None        = 0x0,
+		Alt         = 0x1 << 0,
+		Control     = 0x1 << 1,
+		Shift       = 0x1 << 2,
+		Win         = 0x1 << 3
+    }
 
 }
 
