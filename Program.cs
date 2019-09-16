@@ -10,36 +10,71 @@ namespace GarterBelt
 {
     class Program
     {
+
         [STAThread]
         static void Main(string[] arguments)
+        {
+            ResolveMergedLibraries();
+            if (arguments.Length > 0) startsWithArgs(arguments);
+            else startWithoutArgs();
+        }
+
+        private static void startsWithArgs(string[] args)
+        {
+            // 프로세스 관리 파트 따로 클래스로 빼서 처리
+            // 작용한 프로세스는 gui처리와 마찬가지로 킵
+            // 이후 gui 실행시 이어 작업할 수 있도록 
+
+            // arguments
+            // -p [string]      : * fine process with [string]
+            // -hide            : hide window
+            // -show            : show window
+            // -opa [int]       : set opacity to [int]
+            // -tom [bool]      : set topmost with [bool]
+
+            Garterbelt garter = null;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                switch (args[i])
+                {
+                    case "-p":
+                        if (i + 1 >= args.Length) break;
+                        garter = FetishManager.Instance.FindFetish(args[++i]);
+                        break;
+                    case "-hide":
+                        garter.Hide();
+                        break;
+                    case "-show":
+                        garter.Show();
+                        break;
+                    case "-opa":
+                        if (i + 1 >= args.Length) break;
+                        int opa = -1;
+                        int.TryParse(args[++i], out opa);
+                        if (opa != -1) garter.SetOpacity(byte.Parse(opa.ToString()));
+                        break;
+                    case "-tom":
+                        if (i + 1 >= args.Length) break;
+                        garter.SetTopmost("true" == args[++i].ToLower());
+                        break;
+
+                }
+            }
+        }
+
+        private static void startWithoutArgs()
         {
             // Debug console initializer
             ConsoleManager.Init();
 #if !DEBUG
-			ConsoleManager.Hide();
+            ConsoleManager.Hide();
 #endif
 
-            // Resolve merged libraries from resource
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                string resourceName = new AssemblyName(args.Name).Name + ".dll";
-                string resource = Array.Find(new Program().GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
-
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
-                {
-                    Byte[] assemblyData = new Byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
-            };
-
-            // Make application entrypoint
             var application = new Application
             {
                 StartupUri = new Uri("MainWindow.xaml", UriKind.RelativeOrAbsolute)
             };
-
-            // Initialize wpf resources
             application.Resources.MergedDictionaries.Add(new ResourceDictionary()
             {
                 Source = new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml",
@@ -60,9 +95,23 @@ namespace GarterBelt
                 Source = new Uri("pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml",
                 UriKind.RelativeOrAbsolute)
             });
-
-            // go
             application.Run();
+        }
+
+        private static void ResolveMergedLibraries()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                string resourceName = new AssemblyName(args.Name).Name + ".dll";
+                string resource = Array.Find(new Program().GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
+
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
+                {
+                    Byte[] assemblyData = new Byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            };
         }
     }
 }

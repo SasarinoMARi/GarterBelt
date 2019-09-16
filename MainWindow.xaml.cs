@@ -28,10 +28,7 @@ namespace GarterBelt
     {
         Garterbelt garter = null;
         GlobalHotkeyBinder binder = new GlobalHotkeyBinder();
-
-        string savedir, path;
-
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -39,46 +36,25 @@ namespace GarterBelt
             #region key binding
             binder.AddBindHandler("windowHideHandler", Keys.F1, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
             {
-                HideByHandle();
+                garter?.Hide();
             });
             binder.AddBindHandler("windowShowHandler", Keys.F2, ModifierKeys.Shift, delegate (object sender, KeyPressedEventArgs e)
             {
-                ShowByHandle();
+                garter?.Show();
             });
             binder.AddBindHandler("garterHideHandler", Keys.F1, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
             {
-                HideGarter();
+                this.Hide();
             });
             binder.AddBindHandler("garterShowHandler", Keys.F2, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
             {
-                ShowGarter();
+                this.Show();
             });
             binder.AddBindHandler("garterToggleConsoleHandler", Keys.F3, ModifierKeys.Control, delegate (object sender, KeyPressedEventArgs e)
             {
-                ToggleConsole();
+                ConsoleManager.Toggle();
             });
             #endregion
-
-            savedir = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                Assembly.GetEntryAssembly().GetName().Name
-            );
-            path = System.IO.Path.Combine(savedir, "handles");
-            if (!Directory.Exists(savedir)) Directory.CreateDirectory(savedir);
-            LoadHandle();
-        }
-
-        private void ShowGarter()
-        {
-            this.Show();
-        }
-        private void HideGarter()
-        {
-            this.Hide();
-        }
-        private void ToggleConsole()
-        {
-            ConsoleManager.Toggle();
         }
 
         private void SetProcess(Garterbelt g)
@@ -90,7 +66,6 @@ namespace GarterBelt
                 this.labelHandleId.Content = "선택된 프로세스가 없습니다.";
                 this.sliderOpacity.Value = this.sliderOpacity.Maximum;
                 this.panelMainControls.IsEnabled = false;
-                ExportHandle();
             }
             else
             {
@@ -99,143 +74,25 @@ namespace GarterBelt
                 var opacity = WindowsProperty.SetWindowToStyled(garter.Processes[0].MainWindowHandle);
                 this.sliderOpacity.Value = opacity;
                 if (!this.panelMainControls.IsEnabled) this.panelMainControls.IsEnabled = true;
-                ExportHandle();
             }
         }
         private void FindHandle(string name)
         {
-            name = name.ToLower();
-            Process[] processRunning = Process.GetProcesses();
-            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-            foreach (Process p in processRunning)
-            {
-                if (p.MainWindowHandle.ToInt32() == 0) continue;
-                if (p.ProcessName.ToLower().Contains(name))
-                {
-                    if (garters.Any(x => x.ContainProcess(p)))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        var query = garters.Where(x => x.Name == p.ProcessName);
-                        if (query.Count() > 0)
-                        {
-                            query.First().AttatchGarterbelt(p);
-                            SetProcess(query.First());
-                        }
-                        else
-                        {
-                            var g = new Garterbelt(p);
-                            garters.Add(g);
-                            SetProcess(g);
-                        }
-                    }
-                }
-            }
+            var garter = FetishManager.Instance.FindFetish(name);
+            SetProcess(garter);
         }
-
-        private void ExportHandle()
-        {
-            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-            Garterbelt.SerializeObject(garters.ToList(), path);
-            Console.WriteLine("session export successfully.");
-        }
-        private void LoadHandle()
-        {
-            if (!File.Exists(path)) return;
-            ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-            var saved = Garterbelt.DeserializeObject(path);
-            if (saved == null || saved.Count == 0) return;
-            Garterbelt recent = saved[0];
-            foreach (var garter in saved)
-            {
-                if (!ValidateHandle(garter)) continue;
-                //if (garters.Any(x => x.ContainProcess(garter) == garter.ProcessId && x.Name == garter.Name)) continue;
-                garters.Add(garter);
-            }
-            Console.WriteLine("session import successfully.");
-            Console.WriteLine(string.Format("number of GarterProcess which imported from file : {0}", garters.Count.ToString()));
-            Console.WriteLine(string.Format("recent activated GarterProcess : {0}", recent.ToString()));
-            if (garters.Count > 0)
-            {
-                //var query = garters.Where(item => item.MainWindowHandle == recent.MainWindowHandle);
-                //if (query.Count() > 0) SetProcess(query.First());
-                //else 
-                SetProcess(garters.First());
-            }
-        }
-        private bool ValidateHandle(Garterbelt garter)
-        {
-            try
-            {
-                foreach (var x in garter.Processes)
-                {
-                    var p = Process.GetProcessById(x.ProcessId);
-                    if (p != null) return true;
-                }
-            }
-            catch
-            {
-
-            }
-            return false;
-        }
-
-        private void ShowByHandle()
-        {
-            if (garter == null) return;
-            foreach (var p in garter.Processes)
-            {
-                WindowsProperty.ShowWindow(p.MainWindowHandle);
-            }
-        }
-        private void HideByHandle()
-        {
-            if (garter == null) return;
-            foreach (var p in garter.Processes)
-            {
-                WindowsProperty.HideWindow(p.MainWindowHandle);
-            }
-        }
-        private void DisableTopmostByHandle()
-        {
-            if (garter == null) return;
-            foreach (var p in garter.Processes)
-            {
-                WindowsProperty.SetTopmost(p.MainWindowHandle, false);
-            }
-        }
-        private void TopmostByHandle()
-        {
-            if (garter == null) return;
-            foreach (var p in garter.Processes)
-            {
-                WindowsProperty.SetTopmost(p.MainWindowHandle, true);
-            }
-        }
-        private void OpacityByHandle(byte opacity)
-        {
-            if (garter == null) return;
-            foreach (var p in garter.Processes)
-            {
-                WindowsProperty.SetOpacity(p.MainWindowHandle, opacity);
-            }
-        }
-
-        #region UI Interactions
 
         private void Button_Click_Common(object sender, RoutedEventArgs e)
         {
-            if (sender == this.buttonHideByHandle) HideByHandle();
-            if (sender == this.buttonShowByHandle) ShowByHandle();
+            if (sender == this.buttonHideByHandle) garter?.Hide();
+            if (sender == this.buttonShowByHandle) garter?.Show();
 
-            if (sender == this.buttonTopmost) TopmostByHandle();
-            if (sender == this.buttonNoTopmost) DisableTopmostByHandle();
+            if (sender == this.buttonTopmost) garter?.SetTopmost(true);
+            if (sender == this.buttonNoTopmost) garter?.SetTopmost(false);
         }
         private void SliderOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            OpacityByHandle(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
+            garter?.SetOpacity(byte.Parse(((int)this.sliderOpacity.Value).ToString()));
         }
         private void Button_FindProcessDialogOK_Click(object sender, RoutedEventArgs e)
         {
@@ -254,8 +111,7 @@ namespace GarterBelt
             }
             if (sender == this.buttonSDRemove)
             {
-                ObservableGarterbelt garters = Resources["garters"] as ObservableGarterbelt;
-                garters.Remove(this.listview_garters.SelectedItem as Garterbelt);
+                FetishManager.Instance.RemoveFetish(listview_garters.SelectedItem as Garterbelt);
                 SetProcess(null);
             }
         }
@@ -294,8 +150,6 @@ namespace GarterBelt
             listWindow.IsOpen = false;
             informationWindow.IsOpen = false;
         }
-
-        #endregion
 
     }
 }

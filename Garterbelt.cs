@@ -21,7 +21,7 @@ namespace GarterBelt
         public string Name { get; set; }
         public List<GarterProcess> Processes { get; set; } = new List<GarterProcess>();
 
-        public Garterbelt() {}
+        public Garterbelt() { }
 
         public Garterbelt(Process p) : this()
         {
@@ -51,8 +51,25 @@ namespace GarterBelt
             return false;
         }
 
+        public bool IsValidate()
+        {
+            try
+            {
+                foreach (var item in Processes)
+                {
+                    var p = Process.GetProcessById(item.ProcessId);
+                    if (p != null) return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+        }
+
         #region Object Serialize
-        
+
         public static void SerializeObject(List<Garterbelt> list, string path)
         {
             var json = new JavaScriptSerializer().Serialize(list);
@@ -74,6 +91,38 @@ namespace GarterBelt
                 Console.WriteLine(e);
             }
             return list;
+        }
+        #endregion
+
+        #region Window Control 
+
+        public void Show()
+        {
+            foreach (var p in Processes)
+            {
+                WindowsProperty.ShowWindow(p.MainWindowHandle);
+            }
+        }
+        public void Hide()
+        {
+            foreach (var p in Processes)
+            {
+                WindowsProperty.HideWindow(p.MainWindowHandle);
+            }
+        }
+        public void SetTopmost(bool enable)
+        {
+            foreach (var p in Processes)
+            {
+                WindowsProperty.SetTopmost(p.MainWindowHandle, enable);
+            }
+        }
+        public void SetOpacity(byte opacity)
+        {
+            foreach (var p in Processes)
+            {
+                WindowsProperty.SetOpacity(p.MainWindowHandle, opacity);
+            }
         }
         #endregion
     }
