@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GarterBelt.Windows"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="GarterBelt" Height="450" Width="800">
+    <StackPanel Orientation="Horizontal">
+        <StackPanel x:Name="ProcessContainer" Orientation="Vertical" Background="Black" Width="200">
+
+        </StackPanel>
+        <!--Width="{Binding ActualWidth, ElementName=parentElementName}"-->
+        <StackPanel x:Name="InterectionContainer" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="FindButton">Find</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="HideButton">Hide</Button>
+                <Button x:Name="ShowButton">Show</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="TopMostButton">TopMost</Button>
+                <Button x:Name="TopMostDisableButton">No TopMost</Button>
+            </StackPanel>
+
+        </StackPanel>
+    </StackPanel>
 </Window>

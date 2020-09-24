@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
-namespace GarterBelt.GUI
+namespace GarterBelt
 {
     class ShortCut
     {

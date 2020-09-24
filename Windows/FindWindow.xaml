@@ -1,0 +1,20 @@
+﻿<Window x:Class="GarterBelt.Windows.FindWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GarterBelt.Windows"
+        mc:Ignorable="d"
+        Title="FindWindow" 
+        Width="200" Height="100"
+        WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize" 
+        ShowInTaskbar="False" 
+        Topmost="True"
+        WindowStyle="ToolWindow">
+    <StackPanel Orientation="Vertical">
+        <Label>Enter process name : </Label>
+        <TextBox x:Name="ProcessNameText"/>
+        <Button x:Name="ConfirmButton">Confirm</Button>
+    </StackPanel>
+</Window>
