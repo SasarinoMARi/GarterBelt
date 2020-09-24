@@ -128,6 +128,9 @@
     <Compile Include="GUI\ShortCut.cs" />
     <Compile Include="WindowsProperty.cs" />
     <Compile Include="WindowsHandler.cs" />
+    <Compile Include="Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -181,14 +184,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.XML" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll" />
+    <Page Include="Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarterBelt.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -66,7 +67,10 @@ namespace GarterBelt
 
         private static void startWithoutArgs()
         {
-            System.Windows.Forms.Application.Run(new GarterGUIContext());
+            //System.Windows.Forms.Application.Run(new GarterGUIContext());
+            var window = new MainWindow();
+            window.Show();
+            new System.Windows.Application().Run(window);
         }
 
         private static void ResolveMergedLibraries()
