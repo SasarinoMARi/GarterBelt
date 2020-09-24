@@ -1,68 +1,83 @@
 ﻿using GarterBelt.GUI;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
-namespace GarterBelt.Windows
-{
-    public partial class MainWindow : Window
-    {
-        Garterbelt SelectedGarter = null;
+namespace GarterBelt.Windows {
+    public partial class MainWindow : Window {
+        readonly List<Garterbelt> SelectedGarters = new List<Garterbelt>();
         readonly GlobalHotkeyBinder KeyBinder = new GlobalHotkeyBinder();
 
-        public MainWindow()
-        {
+        public MainWindow() {
             this.InitializeComponent();
             this.initializeHotKey();
             this.initializeButtonEvent();
+
+            this.updateProcessContainer();
         }
 
-        private void initializeButtonEvent()
-        {
+        private void initializeButtonEvent() {
             this.ShowButton.Click += delegate {
-                this.SelectedGarter?.Show();
+                this.showFetishes();
             };
             this.HideButton.Click += delegate {
-                this.SelectedGarter?.Hide();
+                this.hideFetishes();
             };
             this.TopMostButton.Click += delegate {
-                this.SelectedGarter?.SetTopmost(true);
+                this.setTopMostFetishes(true);
             };
             this.TopMostDisableButton.Click += delegate {
-                this.SelectedGarter?.SetTopmost(false);
+                this.setTopMostFetishes(false);
             };
 
-            this.FindButton.Click += delegate
-            {
+            this.FindButton.Click += delegate {
                 var w = new FindWindow();
-                w.onConfirm += delegate (string processName)
-                {
-                    this.SelectedGarter = FetishManager.Instance.FindFetish(processName);
+                w.onConfirm += delegate (string processName) {
+                    var newFetishe = FetishManager.Instance.FindFetish(processName);
+                    this.updateProcessContainer();
+                    if (this.ProcessContainer.Children[this.ProcessContainer.Children.Count - 1] is ProcessView view) {
+                        view.enabled = true;
+                    }
                 };
                 w.ShowDialog();
             };
         }
 
-        private void initializeHotKey()
-        {
+        private void initializeHotKey() {
             var sc = ShortCut.LoadShortcuts();
             var i = 0;
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e)
-            {
-                SelectedGarter?.Show();
+            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+                this.showFetishes();
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e)
-            {
-                SelectedGarter?.Hide();
+            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+                this.hideFetishes();
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e)
-            {
-                this.Show();
+            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+                this.setTopMostFetishes(true);
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e)
-            {
-                this.Hide();
+            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+                this.setTopMostFetishes(false);
             });
         }
 
+        private void updateProcessContainer() {
+            this.ProcessContainer.Children.Clear();
+            foreach (var fetishe in FetishManager.Instance.GetFetishes()) {
+                var view = new ProcessView(fetishe);
+                view.stateChanged += this.processStateChanged;
+                this.ProcessContainer.Children.Add(view);
+            }
+        }
+
+        private void processStateChanged(Garterbelt fetishe, bool enabled) {
+            if (enabled) this.SelectedGarters.Add(fetishe);
+            else this.SelectedGarters.Remove(fetishe);
+        }
+
+        #region 페티시 상호작용
+        private void showFetishes() => this.SelectedGarters.ForEach(it => it.Show());
+        private void hideFetishes() => this.SelectedGarters.ForEach(it => it.Hide());
+        private void setTopMostFetishes(bool state) => this.SelectedGarters.ForEach(it => it.SetTopmost(state));
+        #endregion
     }
 }

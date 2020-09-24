@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="GarterBelt" Height="450" Width="800">
     <StackPanel Orientation="Horizontal">
-        <StackPanel x:Name="ProcessContainer" Orientation="Vertical" Background="Black" Width="200">
+        <StackPanel x:Name="ProcessContainer" Orientation="Vertical" Background="LightGray" Width="200">
 
         </StackPanel>
         <!--Width="{Binding ActualWidth, ElementName=parentElementName}"-->
