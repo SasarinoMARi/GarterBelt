@@ -119,11 +119,11 @@ namespace GarterBelt
                 WindowsProperty.SetTopmost(p.MainWindowHandle, enable);
             }
         }
-        public void SetOpacity(byte opacity)
+        public void SetOpacity(int opacity)
         {
             foreach (var p in Processes)
             {
-                WindowsProperty.SetOpacity(p.MainWindowHandle, opacity);
+                WindowsProperty.SetOpacity(p.MainWindowHandle, (byte)opacity);
             }
         }
         #endregion

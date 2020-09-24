@@ -24,7 +24,11 @@
                 <Button x:Name="TopMostButton">TopMost</Button>
                 <Button x:Name="TopMostDisableButton">No TopMost</Button>
             </StackPanel>
-
+            <StackPanel Orientation="Horizontal">
+                <Slider x:Name="OpacitySlider" 
+                        Width="100"
+                        Maximum="100" Value="100.1" SmallChange="1" LargeChange="10"/>
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </Window>

@@ -54,6 +54,10 @@ namespace GarterBelt.Windows {
                 SelectedGarters.Clear();
                 this.updateProcessContainer();
             };
+
+            this.OpacitySlider.ValueChanged += delegate (object sender, RoutedPropertyChangedEventArgs<double> e) {
+                this.setOpacityFetishes((int)Math.Round(e.NewValue));
+            };
         }
 
         private void initializeHotKey() {
@@ -66,10 +70,10 @@ namespace GarterBelt.Windows {
                 this.hideFetishes();
             });
             this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
-                this.setTopMostFetishes(true);
+                this.Show();
             });
             this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
-                this.setTopMostFetishes(false);
+                this.Hide();
             });
         }
 
@@ -95,6 +99,7 @@ namespace GarterBelt.Windows {
         private void showFetishes() => this.SelectedGarters.ForEach(it => it.Show());
         private void hideFetishes() => this.SelectedGarters.ForEach(it => it.Hide());
         private void setTopMostFetishes(bool state) => this.SelectedGarters.ForEach(it => it.SetTopmost(state));
+        private void setOpacityFetishes(int opacity) => this.SelectedGarters.ForEach(it => it.SetOpacity(opacity));
         #endregion
 
         #region File I/O
