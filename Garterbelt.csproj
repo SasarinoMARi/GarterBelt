@@ -105,31 +105,16 @@
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="FetishManager.cs" />
     <Compile Include="Garterbelt.cs" />
-    <Compile Include="GUI\GarterGUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\GarterGUI.Designer.cs">
-      <DependentUpon>GarterGUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="GlobalHotkeyBinder.cs" />
-    <Compile Include="GUI\GarterSelect.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\GarterSelect.Designer.cs">
-      <DependentUpon>GarterSelect.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ShortcutSelect.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\ShortcutSelect.Designer.cs">
-      <DependentUpon>ShortcutSelect.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ShortCut.cs" />
     <Compile Include="WindowsProperty.cs" />
     <Compile Include="WindowsHandler.cs" />
     <Compile Include="Windows\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\KeyConfigWindow.xaml.cs">
+      <DependentUpon>KeyConfigWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -152,15 +137,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="GUI\GarterGUI.resx">
-      <DependentUpon>GarterGUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\GarterSelect.resx">
-      <DependentUpon>GarterSelect.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ShortcutSelect.resx">
-      <DependentUpon>ShortcutSelect.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -193,6 +169,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Windows\FindWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\KeyConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

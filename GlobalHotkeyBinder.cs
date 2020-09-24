@@ -10,17 +10,24 @@ namespace GarterBelt
 {
 	class GlobalHotkeyBinder
 	{
-		Dictionary<string, KeyboardHook> hookers = new Dictionary<string, KeyboardHook>();
+		List<KeyboardHook> hookers = new List<KeyboardHook>();
 		public GlobalHotkeyBinder() {
 
 		}
 
-		public void AddBindHandler(string name, Keys key, int modifiers, Action<object, KeyPressedEventArgs> callback)
+        public void Clear() {
+            foreach (var hook in hookers) {
+                hook.UnregisterHotKey();
+            }
+            hookers.Clear();
+        }
+
+		public void AddBindHandler(uint key, uint modifiers, Action<object, KeyPressedEventArgs> callback)
 		{
-			var hook = new KeyboardHook();
+			var hook = new KeyboardHook(modifiers, key);
 			hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(callback);
-			hook.RegisterHotKey(modifiers, key);
-			hookers.Add(name, hook);
+			hook.RegisterHotKey();
+			hookers.Add(hook);
 		}
 
 		private sealed class KeyboardHook : IDisposable
@@ -66,24 +73,30 @@ namespace GarterBelt
 			}
 
 			private Window _window = new Window();
-			private int _currentId;
+            private readonly uint modifier;
+            private readonly uint key;
 
-			public KeyboardHook()
+            public KeyboardHook(uint modifier, uint key)
 			{
 				_window.KeyPressed += delegate (object sender, KeyPressedEventArgs args)
 				{
 					if (KeyPressed != null)
 						KeyPressed(this, args);
 				};
-			}
+                this.modifier = modifier;
+                this.key = key;
+            }
 
-			public void RegisterHotKey(int modifier, Keys key)
+			public void RegisterHotKey()
 			{
-				_currentId = _currentId + 1;
-
-				if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+				if (!RegisterHotKey(_window.Handle, 0, (uint)modifier, (uint)key))
 					throw new InvalidOperationException("Couldn’t register the hot key.");
 			}
+
+            public void UnregisterHotKey() {
+                if (!UnregisterHotKey(_window.Handle, 0))
+                    throw new InvalidOperationException("Couldn’t register the hot key.");
+            }
 
 			public event EventHandler<KeyPressedEventArgs> KeyPressed;
 
@@ -91,12 +104,8 @@ namespace GarterBelt
 
 			public void Dispose()
 			{
-				for (int i = _currentId; i > 0; i--)
-				{
-					UnregisterHotKey(_window.Handle, i);
-				}
-
-				_window.Dispose();
+                UnregisterHotKey();
+                _window.Dispose();
 			}
 
 			#endregion

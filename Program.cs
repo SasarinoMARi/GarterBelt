@@ -67,7 +67,6 @@ namespace GarterBelt
 
         private static void startWithoutArgs()
         {
-            //System.Windows.Forms.Application.Run(new GarterGUIContext());
             var window = new MainWindow();
             window.Show();
             new System.Windows.Application().Run(window);
@@ -96,16 +95,6 @@ namespace GarterBelt
 #if !DEBUG
             ConsoleManager.Hide();
 #endif
-        }
-    }
-
-    public class GarterGUIContext : ApplicationContext
-    {
-        public GarterGUIContext()
-        {
-            var f = new GUI.GarterGUI();
-            f.FormClosed += delegate { ExitThread(); };
-            f.Show();
         }
     }
 }

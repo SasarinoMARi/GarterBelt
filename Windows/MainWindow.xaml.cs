@@ -1,5 +1,4 @@
-﻿using GarterBelt.GUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -58,21 +57,29 @@ namespace GarterBelt.Windows {
             this.OpacitySlider.ValueChanged += delegate (object sender, RoutedPropertyChangedEventArgs<double> e) {
                 this.setOpacityFetishes((int)Math.Round(e.NewValue));
             };
+
+            this.KeyConfigButton.Click += delegate {
+                var window = new KeyConfigWindow();
+                window.ShowDialog();
+                this.initializeHotKey();
+            };
         }
 
         private void initializeHotKey() {
+            this.KeyBinder.Clear();
+
             var sc = ShortCut.LoadShortcuts();
             var i = 0;
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+            this.KeyBinder.AddBindHandler(sc[i].key, sc[i++].modifierKey, delegate (object sender, KeyPressedEventArgs e) {
                 this.showFetishes();
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+            this.KeyBinder.AddBindHandler(sc[i].key, sc[i++].modifierKey, delegate (object sender, KeyPressedEventArgs e) {
                 this.hideFetishes();
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+            this.KeyBinder.AddBindHandler(sc[i].key, sc[i++].modifierKey, delegate (object sender, KeyPressedEventArgs e) {
                 this.Show();
             });
-            this.KeyBinder.AddBindHandler("garter" + i, sc[i].Item2, sc[i++].Item1, delegate (object sender, KeyPressedEventArgs e) {
+            this.KeyBinder.AddBindHandler(sc[i].key, sc[i++].modifierKey, delegate (object sender, KeyPressedEventArgs e) {
                 this.Hide();
             });
         }

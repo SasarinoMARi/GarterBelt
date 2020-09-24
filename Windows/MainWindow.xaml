@@ -29,6 +29,9 @@
                         Width="100"
                         Maximum="100" Value="100.1" SmallChange="1" LargeChange="10"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="KeyConfigButton">Key Config</Button>
+            </StackPanel>
         </StackPanel>
     </StackPanel>
 </Window>
