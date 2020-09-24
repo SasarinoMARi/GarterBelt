@@ -68,6 +68,8 @@ namespace GarterBelt
             return false;
         }
 
+        public override bool Equals(object obj) => obj is Garterbelt fetishe ? this.Name == fetishe.Name : base.Equals(obj);
+
         #region Object Serialize
 
         public static void SerializeObject(List<Garterbelt> list, string path)

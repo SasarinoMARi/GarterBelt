@@ -1,6 +1,8 @@
 ﻿using GarterBelt.GUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 
 namespace GarterBelt.Windows {
@@ -14,7 +16,12 @@ namespace GarterBelt.Windows {
             this.initializeButtonEvent();
 
             this.updateProcessContainer();
+            this.loadActiveState();
+            this.Closing += delegate {
+                this.saveActiveState();
+            };
         }
+
 
         private void initializeButtonEvent() {
             this.ShowButton.Click += delegate {
@@ -71,14 +78,14 @@ namespace GarterBelt.Windows {
             foreach (var fetishe in FetishManager.Instance.get()) {
                 var view = new ProcessView(fetishe);
                 view.stateChanged += this.processStateChanged;
-                if (SelectedGarters.Exists(it=>it.Name == fetishe.Name)) view.enabled = true;
+                if (SelectedGarters.Exists(it => it.Name == fetishe.Name)) view.enabled = true;
                 this.ProcessContainer.Children.Add(view);
             }
         }
 
         private void processStateChanged(Garterbelt fetishe, bool enabled) {
             if (enabled) {
-                if(!this.SelectedGarters.Exists(it => it.Name == fetishe.Name))
+                if (!this.SelectedGarters.Exists(it => it.Name == fetishe.Name))
                     this.SelectedGarters.Add(fetishe);
             }
             else this.SelectedGarters.RemoveAll(it => it.Name == fetishe.Name);
@@ -88,6 +95,38 @@ namespace GarterBelt.Windows {
         private void showFetishes() => this.SelectedGarters.ForEach(it => it.Show());
         private void hideFetishes() => this.SelectedGarters.ForEach(it => it.Hide());
         private void setTopMostFetishes(bool state) => this.SelectedGarters.ForEach(it => it.SetTopmost(state));
+        #endregion
+
+        #region File I/O
+        private static readonly GarterStatePreference preference = new GarterStatePreference();
+        private class GarterStatePreference {
+            private static readonly string saveDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                Assembly.GetEntryAssembly().GetName().Name);
+            private static readonly string savePath = Path.Combine(saveDir, "activeState");
+
+            public string[] loadActiveFetishes() {
+                if (!File.Exists(savePath)) return new string[0];
+                var saved = File.ReadAllLines(savePath);
+                return saved ?? (new string[0]);
+            }
+
+            public void saveActiveFetishes(List<Garterbelt> fetishes) {
+                var str = "";
+                fetishes.ForEach(it => str += $"{it}\n");
+                File.WriteAllText(savePath, str.Trim());
+            }
+        }
+        private void loadActiveState() {
+            var fetishes = FetishManager.Instance.get();
+            var result = preference.loadActiveFetishes();
+            foreach (var name in result) fetishes
+                .FindAll(it => it.Name == name)
+                .ForEach(it => this.processStateChanged(it, true));
+            this.updateProcessContainer();
+        }
+
+        private void saveActiveState() => preference.saveActiveFetishes(this.SelectedGarters);
         #endregion
     }
 }
