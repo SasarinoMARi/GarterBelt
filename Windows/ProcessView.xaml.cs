@@ -27,10 +27,11 @@ namespace GarterBelt.Windows {
             this.ProcessName.Content = fetishe.Name;
             // TODO: 프로세스 아이콘 가져오기
 
-            this.ProcessEnabled.Checked += this.ProcessEnabled_Checked;
+            this.ProcessEnabled.Checked += ProcessEnabled_ChangeState;
+            this.ProcessEnabled.Unchecked += ProcessEnabled_ChangeState;
         }
 
-        private void ProcessEnabled_Checked(object sender, RoutedEventArgs e) =>
+        private void ProcessEnabled_ChangeState(object sender, RoutedEventArgs e) =>
             stateChanged?.Invoke(this.fetishe, this.enabled);
 
         public bool enabled {

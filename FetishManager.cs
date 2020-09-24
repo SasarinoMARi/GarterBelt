@@ -11,7 +11,7 @@ namespace GarterBelt
 {
     class FetishManager
     {
-        public List<Garterbelt> GetFetishes(string processName = null)
+        public List<Garterbelt> get(string processName = null)
         {
             var garters = LoadFetish();
             if (processName == null) return garters;
@@ -47,9 +47,9 @@ namespace GarterBelt
             return garters;
         }
 
-        public Garterbelt FindFetish(string processName)
+        public Garterbelt find(string processName)
         {
-            foreach (var garterbelt in GetFetishes(processName))
+            foreach (var garterbelt in get(processName))
             {
                 if (garterbelt.Name.ToLower().Contains(
                     processName.ToLower())) return garterbelt;
@@ -57,11 +57,15 @@ namespace GarterBelt
             return null;
         }
 
-        public void RemoveFetish(Garterbelt garter)
+        public void remove(Garterbelt garter)
         {
             var garters = LoadFetish();
             garters.RemoveAll(g => g.Name == garter.Name);
             SaveFetish(garters);
+        }
+
+        public void clear() {
+            SaveFetish(new List<Garterbelt>());
         }
 
         #region File I/O 

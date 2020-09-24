@@ -42,7 +42,7 @@ namespace GarterBelt
                 {
                     case "-p":
                         if (i + 1 >= args.Length) break;
-                        garter = FetishManager.Instance.FindFetish(args[++i]);
+                        garter = FetishManager.Instance.find(args[++i]);
                         break;
                     case "-hide":
                         garter.Hide();

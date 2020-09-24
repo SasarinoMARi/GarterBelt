@@ -14,6 +14,7 @@
         <StackPanel x:Name="InterectionContainer" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="FindButton">Find</Button>
+                <Button x:Name="ClearButton">Clear</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="HideButton">Hide</Button>

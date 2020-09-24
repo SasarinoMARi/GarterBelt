@@ -33,13 +33,19 @@ namespace GarterBelt.Windows {
             this.FindButton.Click += delegate {
                 var w = new FindWindow();
                 w.onConfirm += delegate (string processName) {
-                    var newFetishe = FetishManager.Instance.FindFetish(processName);
+                    var newFetishe = FetishManager.Instance.find(processName);
                     this.updateProcessContainer();
                     if (this.ProcessContainer.Children[this.ProcessContainer.Children.Count - 1] is ProcessView view) {
                         view.enabled = true;
                     }
                 };
                 w.ShowDialog();
+            };
+
+            this.ClearButton.Click += delegate {
+                FetishManager.Instance.clear();
+                SelectedGarters.Clear();
+                this.updateProcessContainer();
             };
         }
 
@@ -62,16 +68,20 @@ namespace GarterBelt.Windows {
 
         private void updateProcessContainer() {
             this.ProcessContainer.Children.Clear();
-            foreach (var fetishe in FetishManager.Instance.GetFetishes()) {
+            foreach (var fetishe in FetishManager.Instance.get()) {
                 var view = new ProcessView(fetishe);
                 view.stateChanged += this.processStateChanged;
+                if (SelectedGarters.Exists(it=>it.Name == fetishe.Name)) view.enabled = true;
                 this.ProcessContainer.Children.Add(view);
             }
         }
 
         private void processStateChanged(Garterbelt fetishe, bool enabled) {
-            if (enabled) this.SelectedGarters.Add(fetishe);
-            else this.SelectedGarters.Remove(fetishe);
+            if (enabled) {
+                if(!this.SelectedGarters.Exists(it => it.Name == fetishe.Name))
+                    this.SelectedGarters.Add(fetishe);
+            }
+            else this.SelectedGarters.RemoveAll(it => it.Name == fetishe.Name);
         }
 
         #region 페티시 상호작용
